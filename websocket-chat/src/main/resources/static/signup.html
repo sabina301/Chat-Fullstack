@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
+    />
+    <title>Spring Boot WebSocket Chat Application</title>
+    <link rel="stylesheet" href="/css/signup.css" />
+  </head>
+  <body>
+    <noscript>
+      <h2>Your browser doesn't support Javascript</h2>
+    </noscript>
+
+    <div id="username-page">
+      <div class="username-page-container">
+        <h1 class="title">Sign up</h1>
+        <form id="usernameForm" name="usernameForm">
+          <input
+            type="text"
+            id="name"
+            placeholder="Username"
+            autocomplete="off"
+            class="form-control"
+          />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            autocomplete="off"
+            class="form-control"
+          />
+          <button type="submit" class="accent username-submit">Register</button>
+        </form>
+        <a id="enter-question" href="/login.html">
+          Do you have an account now?<br />
+          Log in</a
+        >
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/signup.js"></script>
+  </body>
+</html>

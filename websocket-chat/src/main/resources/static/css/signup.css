@@ -1,0 +1,77 @@
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000000;
+  background-color: #f4f4f4;
+  height: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.form-control {
+  width: 100%;
+  min-height: 38px;
+  font-size: 15px;
+  border: 1px solid #c8c8c8;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input {
+  border-radius: 10px;
+  padding-left: 10px;
+  background-color: #f1f0f7;
+  margin-bottom: 10px;
+  border: none;
+  outline: none;
+}
+
+a {
+  margin: 20px;
+  color: #000000;
+}
+
+button {
+  height: 40px;
+  width: 150px;
+  left: 50%;
+  border-radius: 10px;
+  margin: 20px;
+  border: none;
+  background-color: greenyellow;
+}
+
+#username-page {
+  text-align: center;
+}
+
+.username-page-container {
+  width: 500px;
+  height: max-content;
+  background-color: white;
+  margin: auto;
+  margin-top: 150px;
+  padding: 50px;
+  border-radius: 10px;
+}
+
+.username-page-container .username-submit {
+  margin-top: 10px;
+}
+
+#enter-question {
+  text-align: center;
+  text-decoration: none;
+}

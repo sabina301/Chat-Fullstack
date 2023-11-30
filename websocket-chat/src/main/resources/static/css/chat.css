@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000000;
+  background-color: #f4f4f4;
+  height: 100%;
+}
+
+h2 {
+  text-align: center;
+}
+
+.chat-container {
+  width: 600px;
+  margin: auto;
+  border-radius: 10px;
+  margin-top: 70px;
+  background-color: white;
+  padding: 30px;
+}
+
+.input-group {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.primary {
+  background-color: greenyellow;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#message {
+  padding: 10px;
+  border: none;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  width: 400px;
+}
+
+#messageArea {
+  width: 500px;
+  height: 400px;
+  background-color: #f4f4f4;
+  margin: auto;
+  border-radius: 10px;
+}
