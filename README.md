@@ -2,7 +2,7 @@
 
 This is a code for a chat web site!)
 
-Used: Java, Spring Boot, Spring Security (*with jwt*), PostgreSQL (*with Hibernate*), WebSocket
+Used: Java, Spring Boot, Spring Security (*with jwt*), PostgreSQL (*with Hibernate*), WebSocket, Html, Css, JavaScript
 
 ~~
 
