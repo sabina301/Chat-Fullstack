@@ -5,12 +5,21 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
-//It doesn't work :(
 @Controller
 @CrossOrigin("*")
 public class PageController {
-    @GetMapping("/a")
-    public String showIndexPage() {
-        return "index";
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login.html";
+    }
+
+    @GetMapping("/signup")
+    public String showSignUpPage(){
+        return "signup.html";
+    }
+
+    @GetMapping("/chat")
+    public String showChatPage(){
+        return "chat.html";
     }
 }

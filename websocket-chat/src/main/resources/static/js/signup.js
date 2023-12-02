@@ -32,3 +32,21 @@ document
     var data = JSON.stringify({ username: username, password: password });
     xhr.send(data);
   });
+
+document
+  .getElementById("enter-question")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8080/login", true);
+
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        window.location.href = "http://localhost:8080/login";
+      } else {
+        console.log("Error " + xhr.status);
+      }
+    };
+    xhr.send();
+  });

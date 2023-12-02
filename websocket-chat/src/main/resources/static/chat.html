@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
     <title>Title</title>
@@ -10,6 +10,7 @@
       <div class="chat-container">
         <div class="chat-header">
           <h2>It's a chat!</h2>
+          <h1>Welcome, <span th:text="${username}"></span>!</h1>
         </div>
         <ul id="messageArea"></ul>
         <form id="messageForm" name="messageForm">

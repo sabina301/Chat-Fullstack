@@ -19,6 +19,7 @@ document
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:8080/auth/login", true);
     xhr.setRequestHeader("Content-Type", "application/json");
+
     var data = JSON.stringify({ username: username, password: password });
     xhr.send(data);
     xhr.onload = function () {
@@ -27,10 +28,44 @@ document
         if (response.user == null) {
           displayError();
         } else {
-          window.location.href = "chat.html";
+          let jwt = response.jwt;
+          goToChat(jwt);
         }
       } else {
         console.log("Ошибка");
       }
     };
+  });
+
+function goToChat(jwt) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost:8080/chat", true);
+  xhr.setRequestHeader("Authorization", "Bearer " + jwt);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onload = function () {
+    if (xhr.status == 200) {
+      window.location.href = "http://localhost:8080/chat";
+    } else {
+      console.log("Error", xhr.status);
+    }
+  };
+  xhr.send();
+}
+
+document
+  .getElementById("enter-question")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8080/signup", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        window.location.href = "http://localhost:8080/signup";
+      } else {
+        console.log("Error ", xhr.status);
+      }
+    };
+    xhr.send();
   });

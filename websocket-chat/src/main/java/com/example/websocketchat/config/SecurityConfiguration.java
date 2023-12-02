@@ -52,7 +52,8 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
 
-                    auth.requestMatchers("/auth/**", "/login", "/index.html", "/signup.html", "/css/signup.css", "/js/signup.js", "/login.html", "/css/login.css", "/js/login.js", "/chat.html", "/js/chat.js").permitAll(); //сделано
+                    auth.requestMatchers("/auth/**", "/login", "/signup", "/index.html", "/signup.html", "/css/signup.css", "/js/signup.js", "/login.html", "/css/login.css", "/js/login.js").permitAll(); //сделано
+                    auth.requestMatchers("/chat.html", "/css/chat.css", "/js/chat.js", "/chat").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
 
                 });
