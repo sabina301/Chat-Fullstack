@@ -1,5 +1,6 @@
 package com.example.websocketchat.config;
 
+import com.example.websocketchat.service.UserService;
 import com.example.websocketchat.utilit.RSAKeyProperties;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -7,7 +8,9 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -21,20 +24,28 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@ComponentScan(basePackages = "com.example.websocketchat")
 public class SecurityConfiguration {
     private final RSAKeyProperties keys;
 
     public SecurityConfiguration(RSAKeyProperties keys){
         this.keys = keys;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public UserService userService() {
+        return new UserService();
+    }
+    @Bean
+    public JwtTokenFilter jwtTokenFilter(JwtDecoder jwtDecoder) {
+        return new JwtTokenFilter(jwtDecoder);
     }
 
     @Bean
@@ -46,14 +57,14 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtTokenFilter jwtTokenFilter) throws Exception{
 
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
 
                     auth.requestMatchers("/auth/**", "/login", "/signup", "/index.html", "/signup.html", "/css/signup.css", "/js/signup.js", "/login.html", "/css/login.css", "/js/login.js").permitAll(); //сделано
-                    auth.requestMatchers("/chat.html", "/css/chat.css", "/js/chat.js", "/chat").hasRole("ADMIN");
+                    auth.requestMatchers(  "/chat", "/chat.html").authenticated();
                     auth.anyRequest().authenticated();
 
                 });
@@ -64,6 +75,8 @@ public class SecurityConfiguration {
         http.sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
+        http
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -89,4 +102,6 @@ public class SecurityConfiguration {
         jwtConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtConverter;
     }
+
+
 }

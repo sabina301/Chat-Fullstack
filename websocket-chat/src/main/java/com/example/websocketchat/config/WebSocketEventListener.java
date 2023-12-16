@@ -1,7 +1,7 @@
 package com.example.websocketchat.config;
 
-import com.example.websocketchat.ChatMessage;
-import com.example.websocketchat.MessageType;
+import com.example.websocketchat.model.ChatMessage;
+import com.example.websocketchat.model.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

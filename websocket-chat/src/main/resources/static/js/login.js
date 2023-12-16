@@ -1,3 +1,49 @@
+document
+  .getElementById("usernameForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var username = document.getElementById("name").value;
+    var password = document.getElementById("password").value;
+
+    fetch("/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username: username, password: password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.user == null) {
+          displayError();
+        } else {
+          let jwt = data.jwt;
+          document.cookie = `jwt=${jwt}`;
+          goToChat(jwt);
+        }
+      })
+      .catch((error) => console.error("Ошибка", error));
+  });
+
+function goToChat(jwt) {
+  fetch("/chat", {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + jwt,
+      Cookie: document.cookie,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        window.location.href = "/chat";
+      } else {
+        console.error("Error", response.status);
+      }
+    })
+    .catch((error) => console.error("Error", error));
+}
+
 function displayError() {
   if (document.getElementById("error") == null) {
     let form = document.getElementById("usernameForm");
@@ -9,60 +55,16 @@ function displayError() {
 }
 
 document
-  .getElementById("usernameForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    var username = document.getElementById("name").value;
-    var password = document.getElementById("password").value;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:8080/auth/login", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    var data = JSON.stringify({ username: username, password: password });
-    xhr.send(data);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        if (response.user == null) {
-          displayError();
-        } else {
-          let jwt = response.jwt;
-          goToChat(jwt);
-        }
-      } else {
-        console.log("Ошибка");
-      }
-    };
-  });
-
-function goToChat(jwt) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://localhost:8080/chat", true);
-  xhr.setRequestHeader("Authorization", "Bearer " + jwt);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onload = function () {
-    if (xhr.status == 200) {
-      window.location.href = "http://localhost:8080/chat";
-    } else {
-      console.log("Error", xhr.status);
-    }
-  };
-  xhr.send();
-}
-
-document
   .getElementById("enter-question")
   .addEventListener("click", function (event) {
     event.preventDefault();
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:8080/signup", true);
+    xhr.open("GET", "/signup", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = function () {
       if (xhr.status == 200) {
-        window.location.href = "http://localhost:8080/signup";
+        window.location.href = "/signup";
       } else {
         console.log("Error ", xhr.status);
       }

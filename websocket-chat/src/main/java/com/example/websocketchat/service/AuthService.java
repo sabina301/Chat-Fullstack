@@ -60,6 +60,7 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(username, password)
             );
             String token = tokenService.generateJwt(auth);
+            System.out.println("!!!   CREATE token");
             return new LoginResponseDTO(userRepository.findByUsername(username).get(), token);
 
         } catch(AuthenticationException e){

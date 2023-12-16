@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Title</title>
     <link rel="stylesheet" href="/css/chat.css" />
   </head>
@@ -10,7 +11,7 @@
       <div class="chat-container">
         <div class="chat-header">
           <h2>It's a chat!</h2>
-          <h1>Welcome, <span th:text="${username}"></span>!</h1>
+          <h1>Welcome</h1>
         </div>
         <ul id="messageArea"></ul>
         <form id="messageForm" name="messageForm">
@@ -29,8 +30,5 @@
         </form>
       </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="/js/chat.js"></script>
   </body>
 </html>

@@ -5,14 +5,10 @@ import com.example.websocketchat.model.DTO.RegisterResponseDTO;
 import com.example.websocketchat.model.DTO.RegistrationDTO;
 import com.example.websocketchat.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("*")
 public class AuthController {
     @Autowired
     private AuthService authenticationService;
