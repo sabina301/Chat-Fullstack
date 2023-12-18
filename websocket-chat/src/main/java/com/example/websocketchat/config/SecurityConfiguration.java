@@ -1,5 +1,6 @@
 package com.example.websocketchat.config;
 
+import com.example.websocketchat.service.UserDetailService;
 import com.example.websocketchat.service.UserService;
 import com.example.websocketchat.utilit.RSAKeyProperties;
 import com.nimbusds.jose.jwk.JWK;
@@ -40,8 +41,8 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
     @Bean
-    public UserService userService() {
-        return new UserService();
+    public UserDetailService userDetailService() {
+        return new UserDetailService();
     }
     @Bean
     public JwtTokenFilter jwtTokenFilter(JwtDecoder jwtDecoder) {

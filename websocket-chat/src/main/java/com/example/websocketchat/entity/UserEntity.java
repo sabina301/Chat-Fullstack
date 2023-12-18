@@ -1,6 +1,7 @@
 package com.example.websocketchat.entity;
 
 import com.example.websocketchat.model.Role;
+import com.example.websocketchat.model.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class UserEntity implements UserDetails {
 
     private String username;
     private String password;
+    private UserStatus status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

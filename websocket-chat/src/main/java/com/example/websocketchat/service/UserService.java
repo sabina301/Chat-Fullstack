@@ -1,26 +1,36 @@
 package com.example.websocketchat.service;
 
-
+import com.example.websocketchat.entity.UserEntity;
+import com.example.websocketchat.model.UserStatus;
 import com.example.websocketchat.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 @Service
-public class UserService implements UserDetailsService {
+@RequiredArgsConstructor
+public class UserService {
 
     @Autowired
-    private PasswordEncoder encoder;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public void addUser(UserEntity user){
+        user.setStatus(UserStatus.ONLINE);
+        userRepository.save(user);
+    }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("User not found"));
+    public void disconnectUser(UserEntity user){
+        user.setStatus(UserStatus.OFFLINE);
+        userRepository.save(user);
+    }
+
+    public List<UserEntity> findConnectedUsers(){
+        return userRepository.findAllByStatus(UserStatus.ONLINE);
+    }
+
+    public List<UserEntity> findAllUsers(){
+        return userRepository.findAll();
     }
 }
