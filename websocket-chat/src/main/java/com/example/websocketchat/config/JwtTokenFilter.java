@@ -36,22 +36,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (!token.equals("none")) {
             try {
                 Jwt jwt = jwtDecoder.decode(token);
-                System.out.println("JWT  " + jwt + " NAME: " + jwt.getSubject());
-
-                // Загрузить пользователя по идентификатору из токена (например, из claims)
                 UserDetails userDetails = userService.loadUserByUsername(jwt.getSubject());
-                System.out.println("DETAILS " + userDetails);
-
-                // Создать объект Authentication
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-                // Установить аутентификацию в SecurityContextHolder
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
-                // Handle token validation failure
-                System.out.println("ERROR"); // Вывести трассировку стека или используйте логгер
+                System.out.println("ERROR");
                 System.out.println(e);
-
             }
         }
         filterChain.doFilter(request, response);
@@ -59,13 +49,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 
     private String extractTokenFromCookie(HttpServletRequest request) {
-        // Извлечение токена из куки (замените "yourCookieName" на имя вашей куки)
         if (WebUtils.getCookie(request, "jwt") !=null){
             return WebUtils.getCookie(request, "jwt").getValue();
         } else {
             return "none";
         }
-
     }
 
 }
