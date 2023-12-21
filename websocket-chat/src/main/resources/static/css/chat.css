@@ -51,6 +51,13 @@ h2 {
   background-color: #f4f4f4;
   margin: auto;
   border-radius: 10px;
+  display: none;
+}
+
+#area {
+  width: 500px;
+  height: 400px;
+  background-color: white;
 }
 
 #list-of-chats {
@@ -86,7 +93,17 @@ h2 {
   padding: 30px;
 }
 
-.close {
+#close {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: none;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#closeModalAddUser {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -101,9 +118,24 @@ h2 {
   border: none;
   background-color: #f4f4f4;
   border-radius: 10px;
-  width: 400px;
+  width: 90%;
 }
 
 #createChat {
   margin-top: 30px;
+}
+
+#messageForm {
+  display: none;
+}
+#addUser {
+  display: none;
+}
+
+#username {
+  padding: 10px;
+  border: none;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  width: 90%;
 }

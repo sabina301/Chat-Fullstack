@@ -7,8 +7,6 @@ import com.example.websocketchat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -32,8 +30,28 @@ public class ChatRoomService {
         return chatRoom;
     }
 
-    public List<ChatRoomEntity> getAll(){
-        return chatRoomRepository.findAll();
+    public Set<ChatRoomEntity> getAllForUser(String username) throws Exception {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(()->{
+            return new Exception("Dont have user with this name");
+        });
+        return user.getChatRooms();
+    }
+
+    public UserEntity getUser(String username) throws Exception {
+        return userRepository.findByUsername(username).orElseThrow(()->{
+            return new Exception("Dont have user with this name");
+        });
+    }
+
+    public ChatRoomEntity getChatRoom(String chatId) throws Exception {
+        return chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->{
+            return new Exception("Dont have user with this name");
+        });
+    }
+
+    public void addUserInChatRoom(UserEntity user, ChatRoomEntity chatRoom){
+        chatRoom.addUser(user);
+        user.addChatRoom(chatRoom);
     }
 
     /*public Long findChatRoom(Long senderId, Long recipientId){
