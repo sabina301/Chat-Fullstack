@@ -17,6 +17,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +31,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @ComponentScan(basePackages = "com.example.websocketchat")
+@EnableWebSecurity
 public class SecurityConfiguration {
     private final RSAKeyProperties keys;
 
@@ -61,12 +64,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtTokenFilter jwtTokenFilter) throws Exception{
 
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> {
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeRequests(auth -> {
 
-                    auth.requestMatchers("/auth/**", "/login", "/signup", "/index.html", "/signup.html", "/css/signup.css", "/js/signup.js", "/login.html", "/css/login.css", "/js/login.js").permitAll(); //сделано
+                    auth.requestMatchers("/ws/**","/socket.io/**", "/error/**","/auth/**", "/login", "/signup", "/index.html", "/signup.html", "/css/signup.css", "/js/signup.js", "/login.html", "/css/login.css", "/js/login.js").permitAll(); //сделано
                     auth.requestMatchers(  "/chat", "/chat.html").authenticated();
                     auth.anyRequest().authenticated();
+
 
                 });
 
@@ -81,6 +85,7 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
 
     @Bean
     public JwtDecoder jwtDecoder(){

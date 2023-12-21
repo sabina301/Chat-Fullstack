@@ -4,9 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Title</title>
-    <link rel="stylesheet" href="/css/chat.css" />
+    <link rel="stylesheet" href="css/chat.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
   </head>
   <body>
+    <div id="list-of-chats">
+      <h2>It's your chats</h2>
+      <ul id="chats-area"></ul>
+      <button class="primary" id="createChat">Create New</button>
+    </div>
+
     <div id="chat-page" class="hidden">
       <div class="chat-container">
         <div class="chat-header">
@@ -30,5 +38,25 @@
         </form>
       </div>
     </div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <button class="close">Close</button>
+        <h3>Give the new chat a name</h3>
+        <div class="form-group">
+          <div class="input-group clearfix">
+            <input
+              type="text"
+              id="name"
+              placeholder="Type a name..."
+              autocomplete="off"
+              class="form-control"
+            />
+            <button type="submit" class="primary" id="giveName">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
+  <script src="js/createChat.js"></script>
 </html>

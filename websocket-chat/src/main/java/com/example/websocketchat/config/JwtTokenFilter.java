@@ -1,5 +1,6 @@
 package com.example.websocketchat.config;
 
+import com.example.websocketchat.service.UserDetailService;
 import com.example.websocketchat.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +22,7 @@ import java.io.IOException;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
-    public UserService userService;
+    public UserDetailService userService;
 
     private final JwtDecoder jwtDecoder;
 

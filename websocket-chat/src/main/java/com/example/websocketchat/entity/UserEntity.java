@@ -2,6 +2,7 @@ package com.example.websocketchat.entity;
 
 import com.example.websocketchat.model.Role;
 import com.example.websocketchat.model.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,10 +23,10 @@ import java.util.Set;
 public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private Long id;
 
     private String username;
+    @Column(nullable = false)
     private String password;
     private UserStatus status;
 
@@ -35,6 +37,18 @@ public class UserEntity implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name="role_id")}
     )
     private Set<Role> authorities;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JoinTable(name = "chatroom_user",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name="chatroom_id", referencedColumnName = "id"))
+    private Set<ChatRoomEntity> chatRooms = new HashSet<>();
+
+    public void addChatRoom(ChatRoomEntity chatRoom){
+        chatRooms.add(chatRoom);
+    }
 
     public UserEntity(String username, String password, Set<Role> auth){
         this.username=username;

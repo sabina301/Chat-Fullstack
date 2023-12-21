@@ -40,6 +40,8 @@ public class AuthService {
     public RegisterResponseDTO registerUser(String username, String password) throws Exception{
         if (userRepository.findByUsername(username).isEmpty()){
             String encodedPassword = passwordEncoder.encode(password);
+            System.out.println("!!!PASSWORD " + password);
+            System.out.println("!!!ENCODED PASSWORD " + encodedPassword);
             Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new Exception("Роль не найдена"));
             Set<Role> authorities = new HashSet<Role>();
             authorities.add(userRole);
@@ -60,7 +62,6 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(username, password)
             );
             String token = tokenService.generateJwt(auth);
-            System.out.println("!!!   CREATE token");
             return new LoginResponseDTO(userRepository.findByUsername(username).get(), token);
 
         } catch(AuthenticationException e){

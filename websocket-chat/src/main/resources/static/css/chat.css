@@ -1,11 +1,15 @@
 body {
-  margin: 0;
+  margin: auto;
   padding: 0;
   font-weight: 400;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #000000;
   background-color: #f4f4f4;
   height: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 h2 {
@@ -47,4 +51,59 @@ h2 {
   background-color: #f4f4f4;
   margin: auto;
   border-radius: 10px;
+}
+
+#list-of-chats {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 70px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#chats-area {
+  width: 90px;
+  height: 500px;
+  background-color: #f4f4f4;
+  margin: auto;
+  border-radius: 10px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  width: 40%;
+  height: 22%;
+  overflow: auto;
+  background-color: rgb(255, 255, 255);
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+}
+
+.modal-content {
+  padding: 30px;
+}
+
+.close {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: none;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#name {
+  padding: 10px;
+  border: none;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  width: 400px;
+}
+
+#createChat {
+  margin-top: 30px;
 }
