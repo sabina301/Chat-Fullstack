@@ -23,6 +23,10 @@ close1.onclick = function () {
 };
 
 closeModalAddUser.onclick = function () {
+  if (document.querySelector("#errorText")) {
+    document.querySelector("#errorText").style.display = "none";
+  }
+  document.getElementById("username").value = "";
   modalAddUser.style.display = "none";
 };
 
@@ -41,6 +45,7 @@ var stompClient = Stomp.over(socket);
 
 stompClient.connect({}, function (frame) {
   if (chatsLoaded == false && chatsArea.childElementCount == 0) {
+    console.log("!! I TRY GET IT");
     stompClient.send("/app/chatroom/get", {});
     chatsLoaded = true;
   }
@@ -65,6 +70,14 @@ stompClient.connect({}, function (frame) {
       liText.appendChild(text);
       chatsArea.appendChild(liText);
     });
+  });
+
+  stompClient.subscribe("/user/topic/erroradduser", function (response) {
+    var error = JSON.parse(response.body);
+    var errorText = document.createElement("p");
+    errorText.textContent = error.message;
+    errorText.id = "errorText";
+    modalAddUser.appendChild(errorText);
   });
 });
 

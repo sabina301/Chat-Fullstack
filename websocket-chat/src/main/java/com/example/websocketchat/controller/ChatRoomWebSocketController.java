@@ -11,7 +11,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -22,8 +21,6 @@ public class ChatRoomWebSocketController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-
-
 
     @MessageMapping("/chatroom/create")
     public void createChatRoom(ChatRoomDTOrequest request, Principal principal) throws Exception {
@@ -38,12 +35,15 @@ public class ChatRoomWebSocketController {
     }
 
     @MessageMapping("/chatroom/adduser")
-    public void addUserInChatRoom(AddUserDTOrequest request) throws Exception {
-        UserEntity user = chatRoomService.getUser(request.getUsername());
-        ChatRoomEntity chatRoom = chatRoomService.getChatRoom(request.getChatId());
-        chatRoomService.addUserInChatRoom(user, chatRoom);
-        user.addChatRoom(chatRoom);
-        messagingTemplate.convertAndSendToUser(request.getUsername(),"/topic/chats", chatRoom);
+    public void addUserInChatRoom(AddUserDTOrequest request, Principal principal){
+        try {
+            UserEntity user = chatRoomService.getUser(request.getUsername());
+            ChatRoomEntity chatRoom = chatRoomService.getChatRoom(request.getChatId());
+            chatRoomService.addUserInChatRoom(user, chatRoom);
+            messagingTemplate.convertAndSendToUser(request.getUsername(),"/topic/chats", chatRoom);
+        } catch (Exception err){
+            messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/erroradduser", "{\"message\": \"This user dont exist\"}");
+        }
     }
 }
 

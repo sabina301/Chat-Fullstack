@@ -4,6 +4,8 @@ import com.example.websocketchat.entity.ChatRoomEntity;
 import com.example.websocketchat.entity.UserEntity;
 import com.example.websocketchat.repository.ChatRoomRepository;
 import com.example.websocketchat.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class ChatRoomService {
     @Autowired
     private UserRepository userRepository;
 
+
     public ChatRoomEntity create(String roomName, String username) throws Exception {
         UserEntity user = userRepository.findByUsername(username).orElseThrow(()->{
             return new Exception("Dont have user with this name");
@@ -27,6 +30,7 @@ public class ChatRoomService {
         chatRoomRepository.save(chatRoom);
         chatRoom.addUser(user);
         user.addChatRoom(chatRoom);
+        userRepository.save(user);
         return chatRoom;
     }
 
@@ -49,33 +53,12 @@ public class ChatRoomService {
         });
     }
 
+    @Transactional
     public void addUserInChatRoom(UserEntity user, ChatRoomEntity chatRoom){
-        chatRoom.addUser(user);
-        user.addChatRoom(chatRoom);
+        UserEntity existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        ChatRoomEntity existingChatRoom = chatRoomRepository.findById(chatRoom.getId()).orElseThrow(() -> new EntityNotFoundException("Chat room not found"));
+
+        existingChatRoom.addUser(existingUser);
+        existingUser.addChatRoom(existingChatRoom);
     }
-
-    /*public Long findChatRoom(Long senderId, Long recipientId){
-        ChatRoomEntity chatRoom = chatRoomRepository.findChatRoomBySenderAndRecipient(senderId, recipientId)
-                .or(()->{
-                    createChatRoom(senderId, recipientId);
-                    return;
-                });
-        return chatRoom.getId();
-    }
-
-    public void createChatRoom(Long senderId, Long recipientId){
-
-        ChatRoomEntity senderChatRoom = ChatRoomEntity
-                .builder()
-                .recipientId(recipientId)
-                .build();
-
-        ChatRoomEntity recipientChatRoom = ChatRoomEntity
-                .builder()
-                .recipientId(senderId)
-                .build();
-
-        chatRoomRepository.save(senderChatRoom);
-        chatRoomRepository.save(recipientChatRoom);
-    }*/
 }

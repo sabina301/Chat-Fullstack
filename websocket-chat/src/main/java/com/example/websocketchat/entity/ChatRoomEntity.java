@@ -15,7 +15,7 @@ import java.util.Set;
 public class ChatRoomEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -24,11 +24,8 @@ public class ChatRoomEntity {
     @JsonIgnore
     private Set<ChatMessageEntity> messages = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "chatRooms")
     @JsonIgnore
-    @JoinTable(name = "chatroom_user",
-        joinColumns = @JoinColumn(name = "chatroom_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"))
     private Set<UserEntity> users = new HashSet<>();
 
     public void addUser(UserEntity user){

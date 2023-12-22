@@ -39,7 +39,7 @@ public class UserEntity implements UserDetails {
     private Set<Role> authorities;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinTable(name = "chatroom_user",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

@@ -16,6 +16,16 @@ h2 {
   text-align: center;
 }
 
+ul {
+  text-decoration: none;
+  list-style-type: none;
+}
+
+li {
+  text-decoration: none;
+  padding: 5px;
+}
+
 .chat-container {
   width: 600px;
   margin: auto;
@@ -82,7 +92,6 @@ h2 {
   position: fixed;
   z-index: 1;
   width: 40%;
-  height: 22%;
   overflow: auto;
   background-color: rgb(255, 255, 255);
   border: 3px solid #f4f4f4;
