@@ -37,12 +37,22 @@ public class ChatRoomWebSocketController {
     @MessageMapping("/chatroom/adduser")
     public void addUserInChatRoom(AddUserDTOrequest request, Principal principal){
         try {
+
+            if (request.getUsername() != null && request.getUsername().equals(principal.getName())) {
+                throw new Exception("Error");
+            }
+
             UserEntity user = chatRoomService.getUser(request.getUsername());
             ChatRoomEntity chatRoom = chatRoomService.getChatRoom(request.getChatId());
+
+            if (chatRoomService.userHere(user.getId(), chatRoom.getId())){
+                throw new Exception("Error");
+            }
+
             chatRoomService.addUserInChatRoom(user, chatRoom);
             messagingTemplate.convertAndSendToUser(request.getUsername(),"/topic/chats", chatRoom);
         } catch (Exception err){
-            messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/erroradduser", "{\"message\": \"This user dont exist\"}");
+            messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/erroradduser", "{\"message\": \"Error!\"}");
         }
     }
 }

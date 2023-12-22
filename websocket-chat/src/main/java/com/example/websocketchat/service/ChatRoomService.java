@@ -61,4 +61,18 @@ public class ChatRoomService {
         existingChatRoom.addUser(existingUser);
         existingUser.addChatRoom(existingChatRoom);
     }
+
+    public Boolean userHere(Long userId, Long chatId){
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom not found"));
+
+        Set<UserEntity> users = chatRoom.getUsers();
+
+        for (UserEntity userEntity: users){
+            if (userEntity.getUsername().equals(user.getUsername())){
+                return true;
+            }
+        }
+        return false;
+    }
 }
