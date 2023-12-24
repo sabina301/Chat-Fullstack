@@ -10,6 +10,7 @@ const messageArea = document.querySelector("#messageArea");
 const messageForm = document.querySelector("#messageForm");
 const addUserBtn = document.querySelector("#addUser");
 const writeNameBtn = document.querySelector("#writeName");
+const send = document.querySelector("#send");
 
 let chatsLoaded = false;
 let currentChatId = null;
@@ -44,8 +45,8 @@ var socket = new SockJS("http://localhost:8080/ws");
 var stompClient = Stomp.over(socket);
 
 stompClient.connect({}, function (frame) {
+  var currentUser = frame.headers["user-name"];
   if (chatsLoaded == false && chatsArea.childElementCount == 0) {
-    console.log("!! I TRY GET IT");
     stompClient.send("/app/chatroom/get", {});
     chatsLoaded = true;
   }
@@ -57,6 +58,28 @@ stompClient.connect({}, function (frame) {
     text.textContent = chat.name;
     liText.appendChild(text);
     chatsArea.appendChild(liText);
+
+    stompClient.subscribe("/topic/sendmessage/" + chat.id, function (response) {
+      var message = JSON.parse(response.body);
+
+      let liMessage = document.createElement("li");
+      let senderMessage = document.createElement("p");
+
+      let textMessage = document.createElement("p");
+      textMessage.textContent = message.messageContent;
+
+      console.log("СООБЩЕНИЕ ПОЛУЧЕНО! " + message.messageContent);
+
+      if (message.senderName == currentUser) {
+        senderMessage.textContent = "You :)";
+      } else {
+        senderMessage.textContent = message.senderName;
+        liMessage.style.backgroundColor = "grey";
+      }
+      liMessage.appendChild(senderMessage);
+      liMessage.appendChild(textMessage);
+      messageArea.appendChild(liMessage);
+    });
   });
 
   stompClient.subscribe("/user/topic/getchats", function (response) {
@@ -69,6 +92,56 @@ stompClient.connect({}, function (frame) {
       text.textContent = chat.name;
       liText.appendChild(text);
       chatsArea.appendChild(liText);
+
+      stompClient.subscribe(
+        "/topic/sendmessage/" + chat.id,
+        function (response) {
+          var message = JSON.parse(response.body);
+
+          let liMessage = document.createElement("li");
+          let senderMessage = document.createElement("p");
+
+          let textMessage = document.createElement("p");
+          textMessage.textContent = message.messageContent;
+
+          console.log("СООБЩЕНИЕ ПОЛУЧЕНО! " + message.messageContent);
+
+          if (message.senderName == currentUser) {
+            senderMessage.textContent = "You :)";
+          } else {
+            senderMessage.textContent = message.senderName;
+            liMessage.style.backgroundColor = "grey";
+          }
+          liMessage.appendChild(senderMessage);
+          liMessage.appendChild(textMessage);
+          messageArea.appendChild(liMessage);
+        }
+      );
+    });
+
+    stompClient.subscribe("/user/topic/getmessages", function (response) {
+      while (messageArea.firstChild) {
+        messageArea.removeChild(messageArea.firstChild);
+      }
+      var messages = JSON.parse(response.body);
+      var messagesArray = Object.values(messages);
+      messagesArray.forEach((message) => {
+        let liMessage = document.createElement("li");
+        let senderMessage = document.createElement("p");
+
+        let textMessage = document.createElement("p");
+        textMessage.textContent = message.content;
+
+        if (message.senderName == currentUser) {
+          senderMessage.textContent = "You :)";
+        } else {
+          senderMessage.textContent = message.senderName;
+          liMessage.style.backgroundColor = "grey";
+        }
+        liMessage.appendChild(senderMessage);
+        liMessage.appendChild(textMessage);
+        messageArea.appendChild(liMessage);
+      });
     });
   });
 
@@ -128,4 +201,24 @@ function handleChatClick(chatId, chatName) {
   document.querySelector("#nameChat").textContent = chatName;
   document.querySelector("#addUser").style.display = "block";
   currentChatId = chatId;
+  stompClient.send(
+    "/app/messages/get",
+    {},
+    JSON.stringify({ chatId: currentChatId })
+  );
 }
+
+function sendMessage() {
+  var message = document.querySelector("#message").value;
+  console.log("We get message: " + message);
+  stompClient.send(
+    "/app/messages/sendmessage",
+    {},
+    JSON.stringify({ message: message, chatId: currentChatId })
+  );
+}
+
+send.addEventListener("click", function (event) {
+  event.preventDefault();
+  sendMessage();
+});

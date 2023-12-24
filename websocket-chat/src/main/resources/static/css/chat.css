@@ -56,12 +56,22 @@ li {
 }
 
 #messageArea {
+  list-style: none;
   width: 500px;
-  height: 400px;
+  max-height: 400px;
+  min-height: 400px;
+  overflow-y: auto;
   background-color: #f4f4f4;
   margin: auto;
   border-radius: 10px;
   display: none;
+}
+
+#messageArea li {
+  height: min-content;
+  width: 400px;
+  background-color: rgb(171, 227, 115);
+  margin: 10px;
 }
 
 #area {

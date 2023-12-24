@@ -32,6 +32,10 @@ public class ChatRoomEntity {
         users.add(user);
     }
 
+    public void addMessage(ChatMessageEntity message){
+        messages.add(message);
+    }
+
     public ChatRoomEntity(String name){
         this.name = name;
     }

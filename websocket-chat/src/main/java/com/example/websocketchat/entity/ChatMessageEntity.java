@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -19,11 +20,10 @@ public class ChatMessageEntity {
     @GeneratedValue
     private Long id;
 
-    private Long senderId;
-    private Long recipientId;
+    private String senderName;
     private String content;
-    private MessageType type;
-    private Date timestamp;
+    //private MessageType type;
+    private LocalDateTime timestamp;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
