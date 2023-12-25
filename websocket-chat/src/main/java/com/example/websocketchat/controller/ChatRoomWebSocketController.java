@@ -31,10 +31,10 @@ public class ChatRoomWebSocketController {
     @MessageMapping("/chatroom/get")
     public void getChatRooms(Principal principal) throws Exception {
         Set<ChatRoomEntity> chatRooms = chatRoomService.getAllForUser(principal.getName());
-        messagingTemplate.convertAndSendToUser(principal.getName(), "/topic/getchats", chatRooms);
+        messagingTemplate.convertAndSendToUser(principal.getName(), "/topic/chats/get", chatRooms);
     }
 
-    @MessageMapping("/chatroom/adduser")
+    @MessageMapping("/chatroom/user/add")
     public void addUserInChatRoom(AddUserDTOrequest request, Principal principal){
         try {
 
@@ -52,7 +52,7 @@ public class ChatRoomWebSocketController {
             chatRoomService.addUserInChatRoom(user, chatRoom);
             messagingTemplate.convertAndSendToUser(request.getUsername(),"/topic/chats", chatRoom);
         } catch (Exception err){
-            messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/erroradduser", "{\"message\": \"Error!\"}");
+            messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/error/add/user", "{\"message\": \"Error!\"}");
         }
     }
 }

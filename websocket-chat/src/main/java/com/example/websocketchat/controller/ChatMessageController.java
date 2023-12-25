@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class ChatMessageController {
@@ -23,15 +22,15 @@ public class ChatMessageController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/messages/sendmessage")
+    @MessageMapping("/messages/send")
     public void sendMessage(SendMessageDTOrequest request, Principal principal){
         chatMessageService.sendMessage(request.getMessage(), request.getChatId(), principal.getName());
-        messagingTemplate.convertAndSend("/topic/sendmessage/" + request.getChatId(), new SendMessageDTOresponse(request.getMessage(), principal.getName()));
+        messagingTemplate.convertAndSend("/topic/messages/send/" + request.getChatId(), new SendMessageDTOresponse(request.getMessage(), principal.getName()));
     }
 
     @MessageMapping("/messages/get")
     public void getMessages(GetMessageDTOrequest request, Principal principal){
         List<ChatMessageEntity> messages = chatMessageService.getMessages(request.getChatId());
-        messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/getmessages", messages);
+        messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/messages/get", messages);
     }
 }
