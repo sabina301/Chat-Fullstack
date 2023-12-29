@@ -2,6 +2,8 @@ package com.example.websocketchat.service;
 
 
 import com.example.websocketchat.entity.UserEntity;
+import com.example.websocketchat.exception.RoleNotFoundException;
+import com.example.websocketchat.exception.UserNotFoundException;
 import com.example.websocketchat.model.DTO.LoginResponseDTO;
 import com.example.websocketchat.model.DTO.RegisterResponseDTO;
 import com.example.websocketchat.model.Role;
@@ -37,12 +39,10 @@ public class AuthService {
 
     @Autowired
     private TokenService tokenService;
-    public RegisterResponseDTO registerUser(String username, String password) throws Exception{
+    public RegisterResponseDTO registerUser(String username, String password){
         if (userRepository.findByUsername(username).isEmpty()){
             String encodedPassword = passwordEncoder.encode(password);
-            System.out.println("!!!PASSWORD " + password);
-            System.out.println("!!!ENCODED PASSWORD " + encodedPassword);
-            Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new Exception("Роль не найдена"));
+            Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new RoleNotFoundException("Role is not found"));
             Set<Role> authorities = new HashSet<Role>();
             authorities.add(userRole);
 
@@ -62,11 +62,9 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(username, password)
             );
             String token = tokenService.generateJwt(auth);
-            return new LoginResponseDTO(userRepository.findByUsername(username).get(), token);
+            return new LoginResponseDTO(userRepository.findByUsername(username).orElseThrow(()->new UserNotFoundException("User is not found")), token);
 
-        } catch(AuthenticationException e){
-            return new LoginResponseDTO(null, "");
-        } catch (Exception err){
+        } catch(Exception e){
             return new LoginResponseDTO(null, "");
         }
     }

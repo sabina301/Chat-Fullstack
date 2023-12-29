@@ -2,6 +2,7 @@ package com.example.websocketchat.service;
 
 import com.example.websocketchat.entity.ChatRoomEntity;
 import com.example.websocketchat.entity.UserEntity;
+import com.example.websocketchat.exception.UserNotFoundException;
 import com.example.websocketchat.repository.ChatRoomRepository;
 import com.example.websocketchat.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,10 +22,8 @@ public class ChatRoomService {
     private UserRepository userRepository;
 
 
-    public ChatRoomEntity create(String roomName, String username) throws Exception {
-        UserEntity user = userRepository.findByUsername(username).orElseThrow(()->{
-            return new Exception("Dont have user with this name");
-        });
+    public ChatRoomEntity create(String roomName, String username){
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException("Don't have user with this name"));
         ChatRoomEntity chatRoom = new ChatRoomEntity(roomName);
 
         chatRoomRepository.save(chatRoom);
@@ -34,23 +33,17 @@ public class ChatRoomService {
         return chatRoom;
     }
 
-    public Set<ChatRoomEntity> getAllForUser(String username) throws Exception {
-        UserEntity user = userRepository.findByUsername(username).orElseThrow(()->{
-            return new Exception("Dont have user with this name");
-        });
+    public Set<ChatRoomEntity> getAllForUser(String username) {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException("Don't have user with this name"));
         return user.getChatRooms();
     }
 
-    public UserEntity getUser(String username) throws Exception {
-        return userRepository.findByUsername(username).orElseThrow(()->{
-            return new Exception("Dont have user with this name");
-        });
+    public UserEntity getUser(String username) {
+        return userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException("Don't have user with this name"));
     }
 
-    public ChatRoomEntity getChatRoom(String chatId) throws Exception {
-        return chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->{
-            return new Exception("Dont have user with this name");
-        });
+    public ChatRoomEntity getChatRoom(String chatId) {
+        return chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()-> new UserNotFoundException("Don't have user with this name"));
     }
 
     @Transactional

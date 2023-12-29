@@ -3,6 +3,8 @@ package com.example.websocketchat.service;
 import com.example.websocketchat.entity.ChatMessageEntity;
 import com.example.websocketchat.entity.ChatRoomEntity;
 import com.example.websocketchat.entity.UserEntity;
+import com.example.websocketchat.exception.ChatroomNotFoundException;
+import com.example.websocketchat.exception.UserNotFoundException;
 import com.example.websocketchat.repository.ChatMessageRepository;
 import com.example.websocketchat.repository.ChatRoomRepository;
 import com.example.websocketchat.repository.UserRepository;
@@ -32,8 +34,8 @@ public class ChatMessageService {
     private EntityManager entityManager;
 
     public void sendMessage(String messageContent, String chatRoomId, String username){
-        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatRoomId)).orElseThrow(()->new EntityNotFoundException("ChatRoom not found"));
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User is not found"));
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatRoomId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
         ChatMessageEntity message = new ChatMessageEntity();
         message.setContent(messageContent);
         message.setChatRoom(chatRoom);
@@ -45,7 +47,7 @@ public class ChatMessageService {
         chatRoomRepository.save(chatRoom);
     }
     public List<ChatMessageEntity> getMessages(String chatId){
-        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->new ExpressionException("ChatRoom not found"));
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
         List<ChatMessageEntity> messages = entityManager.createQuery("FROM ChatMessageEntity WHERE chatRoom = :chatRoom ORDER BY timestamp", ChatMessageEntity.class)
                 .setParameter("chatRoom", chatRoom)
                 .getResultList();
