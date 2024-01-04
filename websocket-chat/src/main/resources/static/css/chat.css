@@ -1,3 +1,7 @@
+html {
+  height: 100%;
+}
+
 body {
   margin: auto;
   padding: 0;
@@ -5,6 +9,10 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #000000;
   background-color: #f4f4f4;
+  height: 100%;
+}
+
+#main-container {
   height: 100%;
   display: flex;
   text-align: center;
@@ -26,11 +34,17 @@ li {
   padding: 5px;
 }
 
+#chat-page {
+  margin: 0;
+  padding: 0;
+  width: 90%;
+  height: 100%;
+}
+
 .chat-container {
-  width: 600px;
+  height: 100%;
   margin: auto;
   border-radius: 10px;
-  margin-top: 70px;
   background-color: white;
   padding: 30px;
 }
@@ -57,7 +71,6 @@ li {
 
 #messageArea {
   list-style: none;
-  width: 500px;
   max-height: 400px;
   min-height: 400px;
   overflow-y: auto;
@@ -75,7 +88,7 @@ li {
 }
 
 #area {
-  width: 500px;
+  width: 100%;
   height: 400px;
   background-color: white;
 }
@@ -83,18 +96,52 @@ li {
 #list-of-chats {
   background-color: white;
   border-radius: 10px;
-  padding: 10px;
-  margin-top: 70px;
-  margin-left: 20px;
-  margin-right: 20px;
+  padding: 5px;
+  margin: 5px;
+  height: 100%;
 }
 
 #chats-area {
-  width: 90px;
-  height: 500px;
+  height: max-content;
+  padding: 10px;
   background-color: #f4f4f4;
   margin: auto;
   border-radius: 10px;
+  margin-top: 30px;
+}
+
+#chats-list {
+  margin: auto;
+  padding: 0px;
+}
+
+#search {
+  margin: auto;
+  padding: 0px;
+}
+
+#search .circle img {
+  height: 20px;
+  width: 20px;
+}
+
+#main-chats-list {
+  margin: auto;
+  padding: 0px;
+}
+
+.circle {
+  border-radius: 50%;
+  background-color: rgb(171, 227, 115);
+  width: 50px;
+  height: 50px;
+  margin: auto;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .modal {
@@ -141,7 +188,31 @@ li {
 }
 
 #createChat {
-  margin-top: 30px;
+  position: relative;
+  background-color: rgb(171, 227, 115);
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+  align-self: center;
+}
+
+#createChat img {
+  height: 20px;
+  width: 20px;
+
+  align-self: center;
+}
+
+.separator {
+  background-color: #00000038;
+  height: 3px;
+  width: 100%;
+  border-radius: 10px;
 }
 
 #messageForm {
@@ -157,4 +228,9 @@ li {
   background-color: #f4f4f4;
   border-radius: 10px;
   width: 90%;
+}
+
+#welcome {
+  margin: 0;
+  padding: 0;
 }

@@ -9,74 +9,59 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
   </head>
   <body>
-    <div id="list-of-chats">
-      <h2>It's your chats</h2>
-      <ul id="chats-area"></ul>
-      <button class="primary" id="createChat">Create New</button>
-    </div>
+    <div id="main-container">
+      <div id="list-of-chats">
+        <div id="chats-area">
+          <ul id="main-chats-list">
+            <div class="circle">
+              <p>main</p>
+            </div>
+          </ul>
+          <div class="separator"></div>
+          <ul id="chats-list"></ul>
+          <ul id="search">
+            <div class="circle">
+              <img src="/img/search.png" alt="" />
+            </div>
+          </ul>
+          <div class="separator"></div>
+          <button id="createChat">
+            <img src="img/plus.png" alt="" />
+          </button>
+        </div>
+      </div>
 
-    <div id="chat-page" class="hidden">
-      <div class="chat-container">
-        <div class="chat-header">
-          <h2 id="itsachat">It's a chat!</h2>
-          <h1 id="welcome">Welcome, <span th:text="${username}"></span> !</h1>
-          <h1 id="nameChat"></h1>
-          <button id="addUser" class="primary">Add user</button>
+      <div id="chat-page" class="hidden">
+        <div class="chat-container">
+          <div class="chat-header">
+            <h1 id="welcome">Welcome, <span th:text="${username}"></span> !</h1>
+            <h1 id="nameChat"></h1>
+            <button id="addUser" class="primary">
+              <img src="img/plus_person.png" alt="" />
+            </button>
+          </div>
+
+          <div id="area">
+            <h1>Select a chat or create a new one</h1>
+          </div>
         </div>
-        <ul id="messageArea"></ul>
-        <div id="area">
-          <h1>Select a chat or create a new one</h1>
-        </div>
-        <form id="messageForm" name="messageForm">
+      </div>
+
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <button id="close">Close</button>
+          <h3>Give the new chat a name</h3>
           <div class="form-group">
             <div class="input-group clearfix">
               <input
                 type="text"
-                id="message"
-                placeholder="Type a message..."
+                id="name"
+                placeholder="Type a name..."
                 autocomplete="off"
                 class="form-control"
               />
-              <button class="primary" id="send">Send</button>
+              <button type="submit" class="primary" id="giveName">OK</button>
             </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div id="modal" class="modal">
-      <div class="modal-content">
-        <button id="close">Close</button>
-        <h3>Give the new chat a name</h3>
-        <div class="form-group">
-          <div class="input-group clearfix">
-            <input
-              type="text"
-              id="name"
-              placeholder="Type a name..."
-              autocomplete="off"
-              class="form-control"
-            />
-            <button type="submit" class="primary" id="giveName">OK</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="modalAddUser" class="modal">
-      <div class="modal-content">
-        <button id="closeModalAddUser">Close</button>
-        <h3>Write a username</h3>
-        <div class="form-group">
-          <div class="input-group clearfix">
-            <input
-              type="text"
-              id="username"
-              placeholder="Type a username..."
-              autocomplete="off"
-              class="form-control"
-            />
-            <button type="submit" class="primary" id="writeName">OK</button>
           </div>
         </div>
       </div>
