@@ -37,7 +37,7 @@ public class ChatMessageService {
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User is not found"));
         ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatRoomId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
         ChatMessageEntity message = new ChatMessageEntity();
-        message.setContent(messageContent);
+        message.setMessageContent(messageContent);
         message.setChatRoom(chatRoom);
         message.setSenderName(user.getUsername());
         message.setTimestamp(LocalDateTime.now());

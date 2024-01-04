@@ -21,7 +21,7 @@ public class ChatMessageEntity {
     private Long id;
 
     private String senderName;
-    private String content;
+    private String messageContent;
     //private MessageType type;
     private LocalDateTime timestamp;
 
