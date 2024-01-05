@@ -10,7 +10,8 @@ body {
   font-weight: 400;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #000000;
-  background-color: #f4f4f4;
+  background: url("../img/background-login.png") no-repeat center center fixed;
+  background-size: cover;
   height: 100%;
 }
 
@@ -22,7 +23,6 @@ body {
   width: 100%;
   min-height: 38px;
   font-size: 15px;
-  border: 1px solid #c8c8c8;
 }
 
 .form-group {
@@ -32,7 +32,7 @@ body {
 input {
   border-radius: 10px;
   padding-left: 10px;
-  background-color: #f1f0f7;
+  background-color: #8f76ff17;
   margin-bottom: 10px;
   border: none;
   outline: none;
@@ -50,21 +50,30 @@ button {
   border-radius: 10px;
   margin: 20px;
   border: none;
-  background-color: greenyellow;
+  background: linear-gradient(to right, #bb00ff, rgb(255, 114, 163));
+  transition: background 0.8s ease; /* изменяем на background-image */
+}
+
+button:hover {
+  background: linear-gradient(to right, #a935df, rgb(92, 100, 190));
+  cursor: pointer;
 }
 
 #username-page {
   text-align: center;
+  height: 100%;
 }
 
 .username-page-container {
   width: 500px;
   height: max-content;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.859);
   margin: auto;
-  margin-top: 150px;
+  margin-top: 10%;
   padding: 50px;
   border-radius: 10px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 0px 20px rgb(114, 156, 255);
 }
 
 .username-page-container .username-submit {
@@ -76,6 +85,11 @@ button {
   text-decoration: none;
 }
 
+#enter-question:hover {
+  color: #5437d2;
+  cursor: pointer;
+}
+
 #error {
-  color: rgb(2, 137, 65);
+  color: rgb(0, 0, 0);
 }

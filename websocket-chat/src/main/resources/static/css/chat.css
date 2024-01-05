@@ -3,16 +3,18 @@ html {
 }
 
 body {
+  overflow: hidden;
   margin: auto;
   padding: 0;
   font-weight: 400;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #000000;
-  background-color: #f4f4f4;
+  background-image: url("../img/background-login.png");
   height: 100%;
 }
 
 #main-container {
+  margin-top: 40px;
   height: 100%;
   display: flex;
   text-align: center;
@@ -34,19 +36,32 @@ li {
   padding: 5px;
 }
 
+.chat-header {
+  margin-top: 50px;
+}
+
 #chat-page {
   margin: 0;
   padding: 0;
   width: 90%;
   height: 100%;
+  margin-top: 3%;
+  margin-left: 1.5%;
 }
 
 .chat-container {
-  height: 100%;
+  height: 85%;
   margin: auto;
   border-radius: 10px;
-  background-color: white;
   padding: 30px;
+
+  background-image: linear-gradient(
+    to bottom,
+    #ffffff,
+    rgba(255, 255, 255, 0.696)
+  );
+  backdrop-filter: blur(10px);
+  box-shadow: 10px 0px 30px rgb(114, 156, 255);
 }
 
 .input-group {
@@ -55,59 +70,39 @@ li {
 }
 
 .primary {
-  background-color: greenyellow;
+  background-color: rgb(114, 159, 255);
   border: none;
   padding: 10px;
   border-radius: 10px;
 }
 
-#message {
-  padding: 10px;
-  border: none;
-  background-color: #f4f4f4;
-  border-radius: 10px;
-  width: 400px;
-}
-
-#messageArea {
-  list-style: none;
-  max-height: 400px;
-  min-height: 400px;
-  overflow-y: auto;
-  background-color: #f4f4f4;
-  margin: auto;
-  border-radius: 10px;
-  display: none;
-}
-
-#messageArea li {
-  height: min-content;
-  width: 400px;
-  background-color: rgb(171, 227, 115);
-  margin: 10px;
-}
-
-#area {
-  width: 100%;
-  height: 400px;
-  background-color: white;
+.primary:hover {
+  background-color: rgb(117, 86, 243);
 }
 
 #list-of-chats {
-  background-color: white;
   border-radius: 10px;
-  padding: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
   margin: 5px;
-  height: 100%;
+
+  background-image: linear-gradient(
+    to bottom,
+    #ffffff,
+    rgba(255, 255, 255, 0.696)
+  );
+  backdrop-filter: blur(10px);
+  box-shadow: 10px 0px 30px rgb(114, 156, 255);
 }
 
 #chats-area {
   height: max-content;
   padding: 10px;
-  background-color: #f4f4f4;
+  background-color: #7a66dd17;
   margin: auto;
   border-radius: 10px;
-  margin-top: 30px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 #chats-list {
@@ -132,7 +127,7 @@ li {
 
 .circle {
   border-radius: 50%;
-  background-color: rgb(171, 227, 115);
+  background-color: rgb(114, 159, 255);
   width: 50px;
   height: 50px;
   margin: auto;
@@ -144,14 +139,24 @@ li {
   margin-bottom: 10px;
 }
 
+.circle:hover {
+  border-radius: 15px;
+  background-color: rgb(117, 86, 243);
+}
+
 .modal {
   display: none;
   position: fixed;
   z-index: 1;
   width: 40%;
   overflow: auto;
-  background-color: rgb(255, 255, 255);
-  border: 3px solid #f4f4f4;
+  background-image: linear-gradient(
+    to bottom,
+    #ffffffc4,
+    rgba(255, 255, 255, 0.393)
+  );
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 0px 10px rgb(253, 210, 232);
   border-radius: 10px;
 }
 
@@ -189,7 +194,7 @@ li {
 
 #createChat {
   position: relative;
-  background-color: rgb(171, 227, 115);
+  background-color: rgb(255, 114, 163);
   border: 0;
   padding: 0;
   border-radius: 50%;
@@ -204,7 +209,6 @@ li {
 #createChat img {
   height: 20px;
   width: 20px;
-
   align-self: center;
 }
 
@@ -233,4 +237,8 @@ li {
 #welcome {
   margin: 0;
   padding: 0;
+}
+
+#giveName {
+  margin-top: 10px;
 }

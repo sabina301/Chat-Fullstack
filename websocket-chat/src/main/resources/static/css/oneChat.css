@@ -3,12 +3,13 @@ html {
 }
 
 body {
+  overflow: hidden;
   margin: auto;
   padding: 0;
   font-weight: 400;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #000000;
-  background-color: #f4f4f4;
+  background-image: url("../img/background-login.png");
   height: 100%;
 }
 
@@ -36,16 +37,41 @@ li {
 
 #chat-page {
   margin: 0;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  border-radius: 10px;
   padding: 0;
   width: 90%;
-  height: 100%;
+  height: max-content;
+  background-image: linear-gradient(
+    to bottom,
+    #ffffff,
+    rgba(255, 255, 255, 0.696)
+  );
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 0px 30px rgb(114, 156, 255);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  width: 40%;
+  overflow: auto;
+  background-image: linear-gradient(
+    to bottom,
+    #ffffffc4,
+    rgba(255, 255, 255, 0.393)
+  );
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 0px 10px rgb(253, 210, 232);
+  border-radius: 10px;
 }
 
 .chat-container {
   height: 100%;
   margin: auto;
   border-radius: 10px;
-  background-color: white;
   padding: 30px;
 }
 
@@ -55,10 +81,14 @@ li {
 }
 
 .primary {
-  background-color: greenyellow;
+  background-color: rgb(114, 159, 255);
   border: none;
   padding: 10px;
   border-radius: 10px;
+}
+
+.primary:hover {
+  background-color: rgb(117, 86, 243);
 }
 
 #message {
@@ -70,21 +100,26 @@ li {
 }
 
 #messageArea {
+  position: relative;
   list-style: none;
-  max-height: 400px;
-  min-height: 400px;
+  height: 450px;
   overflow-y: auto;
-  background-color: #f4f4f4;
+  background-color: #ffffffd4;
   margin: auto;
   border-radius: 10px;
+  padding: 0;
+  margin-top: 20px;
 }
 
 #messageArea li {
+  position: relative;
   height: min-content;
   width: 400px;
-  background-color: rgb(171, 227, 115);
+  background-color: rgb(231, 134, 218);
   margin: 10px;
   border-radius: 10px;
+  float: right; /* добавляем это свойство */
+  clear: both; /* добавляем это свойство для предотвращения наложения элементов */
 }
 
 #area {
@@ -128,31 +163,6 @@ li {
 #main-chats-list {
   margin: auto;
   padding: 0px;
-}
-
-.circle {
-  border-radius: 50%;
-  background-color: rgb(171, 227, 115);
-  width: 50px;
-  height: 50px;
-  margin: auto;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  width: 40%;
-  overflow: auto;
-  background-color: rgb(255, 255, 255);
-  border: 3px solid #f4f4f4;
-  border-radius: 10px;
 }
 
 .modal-content {
@@ -226,4 +236,40 @@ li {
 #welcome {
   margin: 0;
   padding: 0;
+}
+
+#addUser {
+  position: relative;
+  padding: 0;
+  height: 42px;
+  width: 42px;
+}
+
+#addUser img {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#searchMessage {
+  position: relative;
+  padding: 0;
+  height: 42px;
+  width: 42px;
+}
+
+#searchMessage img {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#writeName {
+  margin-top: 10px;
 }

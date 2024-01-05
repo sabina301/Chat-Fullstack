@@ -71,12 +71,16 @@ function createMessage(message, currentUser) {
 
   if (message.senderName == currentUser) {
     senderMessage.textContent = "You :)";
+    liMessage.style.float = "right";
   } else {
     senderMessage.textContent = message.senderName;
     liMessage.style.backgroundColor = "grey";
+    liMessage.style.float = "left";
   }
+
   liMessage.appendChild(senderMessage);
   liMessage.appendChild(textMessage);
+
   messageArea.appendChild(liMessage);
 }
 
