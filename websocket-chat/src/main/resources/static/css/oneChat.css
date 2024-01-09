@@ -103,15 +103,25 @@ li {
   margin-top: 20px;
 }
 
-#messageArea li {
+#messageArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.liJoin {
+  color: #000000;
+  text-align: center;
+}
+
+.liMessageArea {
   position: relative;
   height: min-content;
   width: 400px;
   background-color: rgb(231, 134, 218);
   margin: 10px;
   border-radius: 10px;
-  float: right;
-  clear: both;
+  align-self: flex-end;
 }
 
 #area {
@@ -194,6 +204,22 @@ li {
   transform: translate(-50%, -50%);
 }
 
+#back {
+  position: relative;
+  padding: 0;
+  height: 42px;
+  width: 42px;
+}
+
+#back img {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 #searchMessage {
   position: relative;
   padding: 0;
@@ -220,6 +246,23 @@ li {
 #getInfo img {
   position: absolute;
   height: 25px;
+  width: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#exit {
+  position: relative;
+  padding: 0;
+  height: 42px;
+  width: 42px;
+  align-self: flex-end;
+}
+
+#exit img {
+  position: absolute;
+  height: 30px;
   width: auto;
   top: 50%;
   left: 50%;
@@ -378,4 +421,42 @@ li {
 #attach {
   border: none;
   background-color: #f4f4f400;
+}
+
+#modalAttach {
+  position: absolute;
+  display: none;
+  right: 6%;
+  bottom: 16%;
+  background: white;
+  width: 200px;
+  height: max-content;
+  border-radius: 10px;
+}
+
+#attach-photo,
+#attach-video,
+#attach-file {
+  display: flex;
+  cursor: pointer;
+}
+
+#attach-photo:hover,
+#attach-video:hover,
+#attach-file:hover {
+  background-color: #efecf7;
+}
+
+#attach-photo img,
+#attach-video img,
+#attach-file img {
+  margin-right: 10px;
+  margin-left: 15px;
+}
+
+#ul-attach {
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

@@ -14,6 +14,9 @@
         <div class="chat-container">
           <div class="chat-header">
             <h1 id="nameChat"></h1>
+            <button id="back" class="btn">
+              <img src="/img/back.svg" alt="" />
+            </button>
             <button id="addUser" class="btn">
               <img src="/img/plus-person.svg" alt="" />
             </button>
@@ -22,6 +25,9 @@
             </button>
             <button id="getInfo" class="btn">
               <img src="/img/more.svg" alt="" />
+            </button>
+            <button id="exit" class="btn">
+              <img src="/img/close.svg" alt="" />
             </button>
           </div>
           <ul id="messageArea"></ul>
@@ -112,6 +118,23 @@
             <ul id="ul-people"></ul>
           </div>
         </div>
+      </div>
+
+      <div id="modalAttach">
+        <ul id="ul-attach">
+          <li id="attach-photo">
+            <img src="/img/photo.svg" alt="" />
+            <p>Фотография</p>
+          </li>
+          <li id="attach-video">
+            <img src="/img/video.svg" alt="" />
+            <p>Видео</p>
+          </li>
+          <li id="attach-file">
+            <img src="/img/file.svg" alt="" />
+            <p>Файл</p>
+          </li>
+        </ul>
       </div>
     </div>
     <script src="/js/oneChat.js"></script>

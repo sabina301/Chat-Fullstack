@@ -8,6 +8,10 @@ const addUserBtn = document.querySelector("#addUser");
 const modalGetInfo = document.querySelector("#modalGetInfo");
 const getInfoBtn = document.querySelector("#getInfo");
 const closeModalGetInfo = document.querySelector("#closeModalGetInfo");
+const attach = document.querySelector("#attach");
+const modalAttach = document.querySelector("#modalAttach");
+const back = document.querySelector("#back");
+const exit = document.querySelector("#exit");
 
 writeNameBtn.addEventListener("click", addUserInChat);
 send.addEventListener("click", (event) => sendMessage(event));
@@ -15,6 +19,9 @@ addUserBtn.addEventListener("click", () => openModal(modalAddUser));
 getInfoBtn.addEventListener("click", () => openModalGetInfo(modalGetInfo));
 closeModalAddUser.addEventListener("click", closeAddUserModal);
 closeModalGetInfo.addEventListener("click", closeGetInfoModal);
+attach.addEventListener("click", (event) => openModalAttach(event));
+back.addEventListener("click", (event) => goBack(event));
+exit.addEventListener("click", (event) => userExit(event));
 
 var socket = new SockJS("http://localhost:8080/ws");
 var stompClient = Stomp.over(socket);
@@ -25,6 +32,16 @@ function getChatIdFromUrl() {
   return chatId;
 }
 var chatId = getChatIdFromUrl();
+
+function userExit(event) {
+  event.preventDefault();
+  stompClient.send(
+    "/app/chatroom/user/exit",
+    {},
+    JSON.stringify({ chatId: chatId })
+  );
+  window.location.href = "/chat";
+}
 
 function openModal(modal) {
   modal.style.display = "block";
@@ -37,6 +54,20 @@ function openModalGetInfo(modal) {
     {},
     JSON.stringify({ chatId: chatId })
   );
+}
+
+function goBack(event) {
+  event.preventDefault();
+  window.location.href = "/chat";
+}
+
+function openModalAttach(event) {
+  event.preventDefault();
+  if (modalAttach.style.display == "none") {
+    modalAttach.style.display = "block";
+  } else {
+    modalAttach.style.display = "none";
+  }
 }
 
 function closeAddUserModal() {
@@ -83,22 +114,32 @@ function addUserInChat() {
 
 function createMessage(message, currentUser) {
   let liMessage = document.createElement("li");
-  let senderMessage = document.createElement("p");
 
-  let textMessage = document.createElement("p");
-  textMessage.textContent = message.messageContent;
+  if (message.type == "CHAT") {
+    let senderMessage = document.createElement("p");
 
-  if (message.senderName == currentUser) {
-    senderMessage.textContent = "You :)";
-    liMessage.style.float = "right";
+    let textMessage = document.createElement("p");
+    textMessage.textContent = message.messageContent;
+
+    if (message.senderName == currentUser) {
+      senderMessage.textContent = "You :)";
+      liMessage.style.alignSelf = "flex-end";
+    } else {
+      senderMessage.textContent = message.senderName;
+      liMessage.style.backgroundColor = "grey";
+      liMessage.style.alignSelf = "flex-start";
+    }
+
+    liMessage.appendChild(senderMessage);
+    liMessage.appendChild(textMessage);
+
+    liMessage.className = "liMessageArea";
   } else {
-    senderMessage.textContent = message.senderName;
-    liMessage.style.backgroundColor = "grey";
-    liMessage.style.float = "left";
+    let pMessageStatus = document.createElement("p");
+    pMessageStatus.textContent = message.type + " " + message.senderName;
+    liMessage.appendChild(pMessageStatus);
+    liMessage.className = "liJoin";
   }
-
-  liMessage.appendChild(senderMessage);
-  liMessage.appendChild(textMessage);
 
   messageArea.appendChild(liMessage);
 }
@@ -115,8 +156,19 @@ function createChat(chat) {
   chatsList.appendChild(liText);
 }
 
+function createJoinMessage(messageStatus) {
+  let liMessage = document.createElement("li");
+  let pMessageStatus = document.createElement("p");
+  pMessageStatus.textContent =
+    messageStatus.status + " " + messageStatus.username;
+  liMessage.appendChild(pMessageStatus);
+  liMessage.className = "liJoin";
+  messageArea.appendChild(liMessage);
+}
+
 stompClient.connect({}, function (frame) {
   var currentUser = frame.headers["user-name"];
+
   stompClient.subscribe("/user/topic/messages/get", function (response) {
     var messages = JSON.parse(response.body);
     var messagesArray = Object.values(messages);
@@ -140,6 +192,14 @@ stompClient.connect({}, function (frame) {
     var chat = JSON.parse(response.body);
     createChat(chat);
   });
+
+  stompClient.subscribe(
+    "/topic/messages/status/" + chatId,
+    function (response) {
+      var messageStatus = JSON.parse(response.body);
+      createJoinMessage(messageStatus);
+    }
+  );
 
   stompClient.subscribe("/user/topic/error/add/user", function (response) {
     var error = JSON.parse(response.body);
