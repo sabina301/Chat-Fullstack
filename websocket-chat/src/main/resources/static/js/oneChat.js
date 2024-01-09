@@ -5,11 +5,16 @@ const writeNameBtn = document.querySelector("#writeName");
 const modalAddUser = document.querySelector("#modalAddUser");
 const closeModalAddUser = document.querySelector("#closeModalAddUser");
 const addUserBtn = document.querySelector("#addUser");
+const modalGetInfo = document.querySelector("#modalGetInfo");
+const getInfoBtn = document.querySelector("#getInfo");
+const closeModalGetInfo = document.querySelector("#closeModalGetInfo");
 
 writeNameBtn.addEventListener("click", addUserInChat);
 send.addEventListener("click", (event) => sendMessage(event));
 addUserBtn.addEventListener("click", () => openModal(modalAddUser));
+getInfoBtn.addEventListener("click", () => openModalGetInfo(modalGetInfo));
 closeModalAddUser.addEventListener("click", closeAddUserModal);
+closeModalGetInfo.addEventListener("click", closeGetInfoModal);
 
 var socket = new SockJS("http://localhost:8080/ws");
 var stompClient = Stomp.over(socket);
@@ -25,12 +30,26 @@ function openModal(modal) {
   modal.style.display = "block";
 }
 
+function openModalGetInfo(modal) {
+  modal.style.display = "block";
+  stompClient.send(
+    "/app/chatroom/info/get",
+    {},
+    JSON.stringify({ chatId: chatId })
+  );
+}
+
 function closeAddUserModal() {
   if (document.querySelector("#errorText")) {
     document.querySelector("#errorText").style.display = "none";
   }
   document.getElementById("username").value = "";
   modalAddUser.style.display = "none";
+}
+
+function closeGetInfoModal() {
+  modalGetInfo.style.display = "none";
+  document.querySelector("#ul-people").innerHTML = "";
 }
 
 function sendMessage(event) {
@@ -129,6 +148,34 @@ stompClient.connect({}, function (frame) {
     errorText.id = "errorText";
     modalAddUser.appendChild(errorText);
   });
+
+  stompClient.subscribe("/user/topic/chatroom/info/get", function (response) {
+    var chat = JSON.parse(response.body);
+    console.log(chat);
+    document.querySelector("#chatName").textContent = chat.name;
+  });
+
+  stompClient.subscribe(
+    "/user/topic/chatroom/info/get/users",
+    function (response) {
+      var users = JSON.parse(response.body);
+
+      users.forEach((user) => {
+        var liUser = document.createElement("li");
+        liUser.className = "person";
+        var imgUser = document.createElement("img");
+        imgUser.src = "/img/people.svg";
+        var pUser = document.createElement("p");
+        pUser.id = "username";
+        pUser.textContent = user.username;
+
+        liUser.appendChild(imgUser);
+        liUser.appendChild(pUser);
+
+        document.querySelector("#ul-people").appendChild(liUser);
+      });
+    }
+  );
 
   loadChatRoom(chatId);
 });

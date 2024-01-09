@@ -91,14 +91,6 @@ li {
   background-color: rgb(117, 86, 243);
 }
 
-#message {
-  padding: 10px;
-  border: none;
-  background-color: #f4f4f4;
-  border-radius: 10px;
-  width: 400px;
-}
-
 #messageArea {
   position: relative;
   list-style: none;
@@ -118,8 +110,8 @@ li {
   background-color: rgb(231, 134, 218);
   margin: 10px;
   border-radius: 10px;
-  float: right; /* добавляем это свойство */
-  clear: both; /* добавляем это свойство для предотвращения наложения элементов */
+  float: right;
+  clear: both;
 }
 
 #area {
@@ -150,16 +142,6 @@ li {
   padding: 0px;
 }
 
-#search {
-  margin: auto;
-  padding: 0px;
-}
-
-#search .circle img {
-  height: 20px;
-  width: 20px;
-}
-
 #main-chats-list {
   margin: auto;
   padding: 0px;
@@ -180,13 +162,12 @@ li {
 }
 
 #closeModalAddUser {
-  position: absolute;
-  bottom: 0;
-  right: 0;
   border: none;
-  margin: 5px;
-  padding: 10px;
-  border-radius: 10px;
+  background-color: #ffffff00;
+  position: absolute;
+  right: 0;
+  top: 3px;
+  height: 30px;
 }
 
 #name {
@@ -195,47 +176,6 @@ li {
   background-color: #f4f4f4;
   border-radius: 10px;
   width: 90%;
-}
-
-#createChat {
-  position: relative;
-  background-color: rgb(171, 227, 115);
-  border: 0;
-  padding: 0;
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  align-items: center;
-  align-self: center;
-}
-
-#createChat img {
-  height: 20px;
-  width: 20px;
-
-  align-self: center;
-}
-
-.separator {
-  background-color: #00000038;
-  height: 3px;
-  width: 100%;
-  border-radius: 10px;
-}
-
-#username {
-  padding: 10px;
-  border: none;
-  background-color: #f4f4f4;
-  border-radius: 10px;
-  width: 90%;
-}
-
-#welcome {
-  margin: 0;
-  padding: 0;
 }
 
 #addUser {
@@ -270,6 +210,172 @@ li {
   transform: translate(-50%, -50%);
 }
 
+#getInfo {
+  position: relative;
+  padding: 0;
+  height: 42px;
+  width: 42px;
+}
+
+#getInfo img {
+  position: absolute;
+  height: 25px;
+  width: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 #writeName {
   margin-top: 10px;
+}
+
+#head-info-cont {
+  display: flex;
+  align-items: center;
+}
+
+#head-info-cont img {
+  height: 30px;
+  margin-right: 30px;
+  width: auto;
+}
+
+#photo {
+  display: flex;
+  align-items: center;
+}
+
+#video {
+  display: flex;
+  align-items: center;
+}
+
+#file {
+  display: flex;
+  align-items: center;
+}
+
+#photo img {
+  height: 30px;
+  margin-right: 30px;
+  width: auto;
+}
+
+#video img {
+  height: 30px;
+  margin-right: 30px;
+  width: auto;
+}
+
+#file img {
+  height: 30px;
+  margin-right: 30px;
+  width: auto;
+}
+
+#ul-people {
+  padding: 0;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+}
+
+.person img {
+  height: 30px;
+  width: auto;
+  margin-right: 30px;
+}
+
+.settings-cont {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.settings-cont h3 {
+  margin: auto;
+}
+
+#more {
+  margin-right: 10%;
+  height: 30px;
+  width: 30px;
+}
+
+#more:hover {
+  content: "";
+  background-color: #2a0e5412;
+  display: block;
+  border-radius: 10px;
+  height: 30px;
+  width: 30px;
+}
+
+.closeModalGetInfo {
+  height: 30px;
+  width: 30px;
+  right: 0;
+}
+
+.closeModalGetInfo img {
+  width: 30px;
+  height: auto;
+}
+
+.closeModalGetInfo:hover {
+  content: "";
+  background-color: #2a0e5412;
+  display: block;
+  border-radius: 10px;
+}
+
+#more img {
+  width: 30px;
+  height: auto;
+  transform: rotate(90deg);
+}
+
+.btn {
+  border-radius: 10px;
+  border: none;
+  background-color: white;
+  box-shadow: 0px 0px 10px rgb(233, 224, 229);
+}
+
+.btn:hover {
+  background-color: rgb(239, 237, 244);
+}
+
+#getInfo {
+  transform: rotate(90deg);
+}
+
+.form-control {
+  padding: 10px;
+  border: none;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  width: 90%;
+}
+
+#input-message {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#send {
+  border: none;
+  background-color: #f4f4f400;
+  margin-left: 13px;
+}
+
+#attach {
+  border: none;
+  background-color: #f4f4f400;
 }

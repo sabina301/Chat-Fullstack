@@ -14,17 +14,20 @@
         <div class="chat-container">
           <div class="chat-header">
             <h1 id="nameChat"></h1>
-            <button id="addUser" class="primary">
-              <img src="/img/plus_person.png" alt="" />
+            <button id="addUser" class="btn">
+              <img src="/img/plus-person.svg" alt="" />
             </button>
-            <button id="searchMessage" class="primary">
-              <img src="/img/search.png" alt="" />
+            <button id="searchMessage" class="btn">
+              <img src="/img/search.svg" alt="" />
+            </button>
+            <button id="getInfo" class="btn">
+              <img src="/img/more.svg" alt="" />
             </button>
           </div>
           <ul id="messageArea"></ul>
           <form id="messageForm" name="messageForm">
             <div class="form-group">
-              <div class="input-group clearfix">
+              <div class="input-group clearfix" id="input-message">
                 <input
                   type="text"
                   id="message"
@@ -32,35 +35,20 @@
                   autocomplete="off"
                   class="form-control"
                 />
-                <button class="primary" id="send">Send</button>
+                <button id="send">
+                  <img src="/img/send.svg" alt="" />
+                </button>
+                <button id="attach">
+                  <img src="/img/more.svg" alt="" />
+                </button>
               </div>
             </div>
           </form>
         </div>
       </div>
 
-      <div id="modal" class="modal">
-        <div class="modal-content">
-          <button id="close">Close</button>
-          <h3>Give the new chat a name</h3>
-          <div class="form-group">
-            <div class="input-group clearfix">
-              <input
-                type="text"
-                id="name"
-                placeholder="Type a name..."
-                autocomplete="off"
-                class="form-control"
-              />
-              <button type="submit" class="primary" id="giveName">OK</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div id="modalAddUser" class="modal">
         <div class="modal-content">
-          <button id="closeModalAddUser">Close</button>
           <h3>Write a username</h3>
           <div class="form-group">
             <div class="input-group clearfix">
@@ -74,9 +62,58 @@
               <button type="submit" class="primary" id="writeName">OK</button>
             </div>
           </div>
+          <button id="closeModalAddUser">
+            <div class="closeModalGetInfo">
+              <img src="/img/close.svg" alt="" />
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div id="modalGetInfo" class="modal">
+        <div class="modal-content">
+          <div class="settings-cont">
+            <h3>Information about chat</h3>
+
+            <div class="settings-cont">
+              <div id="more">
+                <img src="/img/more.svg" alt="" />
+              </div>
+
+              <div id="closeModalGetInfo" class="closeModalGetInfo">
+                <img src="/img/close.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div id="head-info-cont">
+            <img src="/img/people.svg" alt="" />
+            <p id="chatName">Chat name</p>
+          </div>
+          <div>
+            <p>Description</p>
+          </div>
+          <div id="info-chat-quantity">
+            <div id="photo">
+              <img src="/img/photo.svg" alt="" />
+              <p id="photo-quantity">Quantity</p>
+            </div>
+            <div id="video">
+              <img src="/img/video.svg" alt="" />
+              <p id="video-quantity">Quantity</p>
+            </div>
+            <div id="file">
+              <img src="/img/file.svg" alt="" />
+              <p id="file-quantity">Quantity</p>
+            </div>
+          </div>
+          <div id="info-chat-people">
+            <p>People</p>
+            <ul id="ul-people"></ul>
+          </div>
         </div>
       </div>
     </div>
+    <script src="/js/oneChat.js"></script>
   </body>
-  <script src="/js/oneChat.js"></script>
 </html>
