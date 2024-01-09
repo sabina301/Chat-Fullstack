@@ -3,6 +3,7 @@ package com.example.websocketchat.service;
 import com.example.websocketchat.entity.ChatRoomEntity;
 import com.example.websocketchat.entity.UserEntity;
 import com.example.websocketchat.exception.UserNotFoundException;
+import com.example.websocketchat.model.DTO.UserGetDTOresponse;
 import com.example.websocketchat.repository.ChatRoomRepository;
 import com.example.websocketchat.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,6 +11,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -67,5 +70,16 @@ public class ChatRoomService {
             }
         }
         return false;
+    }
+
+    public Set<UserGetDTOresponse> getUsers(String chatId){
+        ChatRoomEntity chatRoomEntity = getChatRoom(chatId);
+        Set<UserEntity> userEntities = chatRoomEntity.getUsers();
+        Set<UserGetDTOresponse> users = new HashSet<>();
+        for (UserEntity userEntity: userEntities) {
+            UserGetDTOresponse userGetDTOresponse = new UserGetDTOresponse(userEntity.getId(), userEntity.getUsername());
+            users.add(userGetDTOresponse);
+        }
+        return users;
     }
 }

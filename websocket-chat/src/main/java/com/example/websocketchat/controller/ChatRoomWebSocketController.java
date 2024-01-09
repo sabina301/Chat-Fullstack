@@ -5,6 +5,7 @@ import com.example.websocketchat.entity.UserEntity;
 import com.example.websocketchat.model.DTO.ChatRoomDTOrequest;
 import com.example.websocketchat.model.DTO.AddUserDTOrequest;
 import com.example.websocketchat.model.DTO.ChatRoomSelectDTOrequest;
+import com.example.websocketchat.model.DTO.UserGetDTOresponse;
 import com.example.websocketchat.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -64,6 +65,13 @@ public class ChatRoomWebSocketController {
         }
     }
 
+    @MessageMapping("/chatroom/info/get")
+    public void getChatroomInfo(ChatRoomSelectDTOrequest request, Principal principal){
+        ChatRoomEntity chatRoom = chatRoomService.getChatRoom(request.getChatId());
+        messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/chatroom/info/get",chatRoom);
+        Set<UserGetDTOresponse> userEntities = chatRoomService.getUsers(request.getChatId());
+        messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/chatroom/info/get/users", userEntities);
+    }
 
 }
 
