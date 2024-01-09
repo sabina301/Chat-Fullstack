@@ -1,9 +1,13 @@
 package com.example.websocketchat.service;
 
+import com.example.websocketchat.entity.ChatMessageEntity;
 import com.example.websocketchat.entity.ChatRoomEntity;
 import com.example.websocketchat.entity.UserEntity;
+import com.example.websocketchat.exception.ChatroomNotFoundException;
 import com.example.websocketchat.exception.UserNotFoundException;
 import com.example.websocketchat.model.DTO.UserGetDTOresponse;
+import com.example.websocketchat.model.MessageType;
+import com.example.websocketchat.repository.ChatMessageRepository;
 import com.example.websocketchat.repository.ChatRoomRepository;
 import com.example.websocketchat.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +28,9 @@ public class ChatRoomService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
 
 
     public ChatRoomEntity create(String roomName, String username){
@@ -81,5 +89,33 @@ public class ChatRoomService {
             users.add(userGetDTOresponse);
         }
         return users;
+    }
+
+    public void saveMessageStatus(MessageType messageType, String username, String chatId){
+        ChatMessageEntity message = new ChatMessageEntity();
+        ChatRoomEntity chatRoom = getChatRoom(chatId);
+        message.setMessageContent("");
+        message.setChatRoom(chatRoom);
+        message.setSenderName(username);
+        message.setType(messageType);
+        message.setTimestamp(LocalDateTime.now());
+        chatMessageRepository.save(message);
+
+        chatRoom.addMessage(message);
+        chatRoomRepository.save(chatRoom);
+    }
+
+    @Transactional
+    public void exitUser(String username, String chatId){
+
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(()->new UserNotFoundException("User not found"));
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
+
+        user.deleteChatRoom(chatRoom);
+        chatRoom.deleteUser(user);
+
+        userRepository.save(user);
+        chatRoomRepository.save(chatRoom);
+
     }
 }

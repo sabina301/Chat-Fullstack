@@ -5,6 +5,7 @@ import com.example.websocketchat.entity.ChatRoomEntity;
 import com.example.websocketchat.entity.UserEntity;
 import com.example.websocketchat.exception.ChatroomNotFoundException;
 import com.example.websocketchat.exception.UserNotFoundException;
+import com.example.websocketchat.model.MessageType;
 import com.example.websocketchat.repository.ChatMessageRepository;
 import com.example.websocketchat.repository.ChatRoomRepository;
 import com.example.websocketchat.repository.UserRepository;
@@ -40,6 +41,7 @@ public class ChatMessageService {
         message.setMessageContent(messageContent);
         message.setChatRoom(chatRoom);
         message.setSenderName(user.getUsername());
+        message.setType(MessageType.CHAT);
         message.setTimestamp(LocalDateTime.now());
         chatMessageRepository.save(message);
 
@@ -54,4 +56,6 @@ public class ChatMessageService {
 
         return messages;
     }
+
+
 }

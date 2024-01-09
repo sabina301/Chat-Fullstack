@@ -1,17 +1,17 @@
 package com.example.websocketchat.controller;
 
+import com.example.websocketchat.entity.ChatMessageEntity;
 import com.example.websocketchat.entity.ChatRoomEntity;
 import com.example.websocketchat.entity.UserEntity;
-import com.example.websocketchat.model.DTO.ChatRoomDTOrequest;
-import com.example.websocketchat.model.DTO.AddUserDTOrequest;
-import com.example.websocketchat.model.DTO.ChatRoomSelectDTOrequest;
-import com.example.websocketchat.model.DTO.UserGetDTOresponse;
+import com.example.websocketchat.model.DTO.*;
+import com.example.websocketchat.model.MessageType;
 import com.example.websocketchat.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
 import java.util.Set;
@@ -60,6 +60,8 @@ public class ChatRoomWebSocketController {
 
             chatRoomService.addUserInChatRoom(user, chatRoom);
             messagingTemplate.convertAndSendToUser(request.getUsername(),"/topic/chatroom/create", chatRoom);
+            chatRoomService.saveMessageStatus(MessageType.JOIN, request.getUsername(), request.getChatId());
+            messagingTemplate.convertAndSend("/topic/messages/status/" + request.getChatId(), new MessageStatusDTOrequest(MessageType.JOIN, request.getUsername()));
         } catch (Exception err){
             messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/error/add/user", "{\"message\": \"Error!\"}");
         }
@@ -71,6 +73,14 @@ public class ChatRoomWebSocketController {
         messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/chatroom/info/get",chatRoom);
         Set<UserGetDTOresponse> userEntities = chatRoomService.getUsers(request.getChatId());
         messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/chatroom/info/get/users", userEntities);
+    }
+
+    @MessageMapping("/chatroom/user/exit")
+    public String exitUser(@RequestBody GetMessageDTOrequest request, Principal principal){
+        System.out.println("!!!!!!! 1 IM THERE");
+        chatRoomService.exitUser(principal.getName(), request.getChatId());
+        messagingTemplate.convertAndSend("/topic/messages/status/" + request.getChatId(),  new MessageStatusDTOrequest(MessageType.LEAVE, principal.getName()));
+        return "chat.html";
     }
 
 }

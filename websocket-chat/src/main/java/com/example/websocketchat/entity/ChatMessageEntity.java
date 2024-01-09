@@ -22,7 +22,7 @@ public class ChatMessageEntity {
 
     private String senderName;
     private String messageContent;
-    //private MessageType type;
+    private MessageType type;
     private LocalDateTime timestamp;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -24,12 +24,16 @@ public class ChatRoomEntity {
     @JsonIgnore
     private Set<ChatMessageEntity> messages = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "chatRooms")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "chatRooms")
     @JsonIgnore
     private Set<UserEntity> users = new HashSet<>();
 
     public void addUser(UserEntity user){
         users.add(user);
+    }
+
+    public void deleteUser(UserEntity user){
+        users.remove(user);
     }
 
     public void addMessage(ChatMessageEntity message){

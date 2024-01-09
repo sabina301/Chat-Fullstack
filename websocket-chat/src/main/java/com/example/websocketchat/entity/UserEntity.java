@@ -39,7 +39,7 @@ public class UserEntity implements UserDetails {
     private Set<Role> authorities;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinTable(name = "chatroom_user",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -48,6 +48,10 @@ public class UserEntity implements UserDetails {
 
     public void addChatRoom(ChatRoomEntity chatRoom){
         chatRooms.add(chatRoom);
+    }
+
+    public void deleteChatRoom(ChatRoomEntity chatRoom){
+        chatRooms.remove(chatRoom);
     }
 
     public UserEntity(String username, String password, Set<Role> auth){
