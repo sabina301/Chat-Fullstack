@@ -24,7 +24,7 @@ public class ChatRoomEntity {
     @JsonIgnore
     private Set<ChatMessageEntity> messages = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "chatRooms")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "chatRooms", cascade = CascadeType.REFRESH)
     @JsonIgnore
     private Set<UserEntity> users = new HashSet<>();
 
