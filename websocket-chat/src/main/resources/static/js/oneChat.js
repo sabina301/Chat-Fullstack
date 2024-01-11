@@ -159,9 +159,7 @@ function addUserInChat() {
 
 function createTextMessage(message, currentUser) {
   let liMessage = document.createElement("li");
-
   let senderMessage = document.createElement("p");
-
   let textMessage = document.createElement("p");
   textMessage.textContent = message.messageContent;
 
@@ -173,12 +171,9 @@ function createTextMessage(message, currentUser) {
     liMessage.style.backgroundColor = "grey";
     liMessage.style.alignSelf = "flex-start";
   }
-
   liMessage.appendChild(senderMessage);
   liMessage.appendChild(textMessage);
-
   liMessage.className = "liMessageArea";
-
   messageArea.appendChild(liMessage);
 }
 
@@ -236,7 +231,7 @@ function createJoinMessage(messageStatus) {
   let liMessage = document.createElement("li");
   let pMessageStatus = document.createElement("p");
   pMessageStatus.textContent =
-    messageStatus.type + " " + messageStatus.username;
+    messageStatus.type + " " + messageStatus.senderName;
   liMessage.appendChild(pMessageStatus);
   liMessage.className = "liJoin";
   messageArea.appendChild(liMessage);

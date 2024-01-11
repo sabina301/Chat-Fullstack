@@ -137,6 +137,7 @@ li {
   height: min-content;
   margin: 10px;
   align-self: flex-end;
+  border-radius: 10px;
 }
 
 #area {
