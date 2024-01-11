@@ -77,7 +77,6 @@ public class ChatRoomWebSocketController {
 
     @MessageMapping("/chatroom/user/exit")
     public String exitUser(@RequestBody GetMessageDTOrequest request, Principal principal){
-        System.out.println("!!!!!!! 1 IM THERE");
         chatRoomService.exitUser(principal.getName(), request.getChatId());
         messagingTemplate.convertAndSend("/topic/messages/status/" + request.getChatId(),  new MessageStatusDTOrequest(MessageType.LEAVE, principal.getName()));
         return "chat.html";

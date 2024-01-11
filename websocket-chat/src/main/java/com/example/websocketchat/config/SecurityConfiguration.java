@@ -66,12 +66,9 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> {
-
-                    auth.requestMatchers("/ws/**","/socket.io/**", "/error/**","/auth/**", "/login", "/signup", "/index.html", "/signup.html", "/css/signup.css", "/js/signup.js", "/login.html", "/css/login.css", "/js/login.js", "/img/**").permitAll(); //сделано
-                    auth.requestMatchers(  "/chat", "/chat.html").authenticated();
+                    auth.requestMatchers("/ws/**","/socket.io/**", "/error/**", "/auth/**", "/login", "/signup", "/index.html", "/signup.html", "/login.html", "/img/**", "/css/**", "/js/**").permitAll(); //сделано
+                    auth.requestMatchers(  "/chat", "/chat.html", "/chatroom/**", "/messages/**").authenticated();
                     auth.anyRequest().authenticated();
-
-
                 });
 
         http.oauth2ResourceServer()

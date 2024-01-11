@@ -1,7 +1,6 @@
 package com.example.websocketchat.config;
 
 import com.example.websocketchat.service.UserDetailService;
-import com.example.websocketchat.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,5 +1,6 @@
 package com.example.websocketchat.model.DTO;
 
+import com.example.websocketchat.model.MessageType;
 import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,9 +11,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class SendMessageDTOrequest {
-    private String message;
-    private String chatId;
-    private String type;
+public class SendImgDTOresponse {
+    private String senderName;
+    private MessageType type;
+    @Lob
+    private byte[] byteImg;
 }

@@ -2,6 +2,7 @@ package com.example.websocketchat.service;
 
 
 import com.example.websocketchat.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +21,7 @@ public class UserDetailService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("User is not found"));
     }

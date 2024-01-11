@@ -10,11 +10,10 @@ import com.example.websocketchat.repository.ChatMessageRepository;
 import com.example.websocketchat.repository.ChatRoomRepository;
 import com.example.websocketchat.repository.UserRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,28 +33,52 @@ public class ChatMessageService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void sendMessage(String messageContent, String chatRoomId, String username){
+    @Transactional
+    public void sendTextMessage(String messageContent, String chatRoomId, String username){
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User is not found"));
         ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatRoomId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
         ChatMessageEntity message = new ChatMessageEntity();
         message.setMessageContent(messageContent);
         message.setChatRoom(chatRoom);
         message.setSenderName(user.getUsername());
-        message.setType(MessageType.CHAT);
+        message.setType(MessageType.TEXT);
+        message.setByteImg(new byte[]{0});
         message.setTimestamp(LocalDateTime.now());
         chatMessageRepository.save(message);
 
         chatRoom.addMessage(message);
         chatRoomRepository.save(chatRoom);
     }
-    public List<ChatMessageEntity> getMessages(String chatId){
-        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
-        List<ChatMessageEntity> messages = entityManager.createQuery("FROM ChatMessageEntity WHERE chatRoom = :chatRoom ORDER BY timestamp", ChatMessageEntity.class)
-                .setParameter("chatRoom", chatRoom)
-                .getResultList();
 
-        return messages;
+    @Transactional
+    public void sendImgMessage(byte[] byteImg, String chatRoomId, String username){
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User is not found"));
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatRoomId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
+
+        ChatMessageEntity message = new ChatMessageEntity();
+        message.setMessageContent("Image");
+        message.setChatRoom(chatRoom);
+        message.setSenderName(user.getUsername());
+        message.setType(MessageType.IMG);
+        message.setByteImg(byteImg);
+        message.setTimestamp(LocalDateTime.now());
+
+        chatMessageRepository.save(message);
+
+        chatRoom.addMessage(message);
+        chatRoomRepository.save(chatRoom);
     }
 
-
+    @Transactional
+    public List<ChatMessageEntity> getMessages(String chatId){
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
+        List<ChatMessageEntity> messages = entityManager.createQuery("SELECT id, senderName, messageContent, type, timestamp FROM ChatMessageEntity WHERE chatRoom = :chatRoom ORDER BY timestamp", ChatMessageEntity.class)
+                .setParameter("chatRoom", chatRoom)
+                .getResultList();
+        for (ChatMessageEntity message : messages) {
+            byte[] byteImg = chatMessageRepository.findById(message.getId()).get().getByteImg();
+            message.setByteImg(byteImg);
+        }
+        return messages;
+    }
 }
