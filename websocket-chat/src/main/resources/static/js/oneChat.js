@@ -24,7 +24,9 @@ back.addEventListener("click", (event) => goBack(event));
 exit.addEventListener("click", (event) => userExit(event));
 
 var socket = new SockJS("http://localhost:8080/ws");
-var stompClient = Stomp.over(socket);
+var stompClient = Stomp.over(socket, {
+  websocketLargeMessageSize: 3 * 1024 * 1024,
+});
 
 function getChatIdFromUrl() {
   var url = new URL(window.location.href);
@@ -32,6 +34,44 @@ function getChatIdFromUrl() {
   return chatId;
 }
 var chatId = getChatIdFromUrl();
+
+function openFileInput() {
+  document.getElementById("imageInput").click();
+}
+
+document.getElementById("imageInput").addEventListener("change", function () {
+  uploadImage();
+});
+
+function uploadImage() {
+  var input = document.getElementById("imageInput");
+  var image = input.files[0];
+
+  if (image) {
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+      var arrayBuffer = reader.result;
+      var byteArray = new Uint8Array(arrayBuffer);
+      var base64Image = encodeByteArray(byteArray);
+      stompClient.send(
+        "/app/messages/send/img",
+        { chatId: chatId },
+        base64Image
+      );
+    };
+
+    reader.readAsArrayBuffer(image);
+  }
+}
+
+function encodeByteArray(byteArray) {
+  var binaryString = "";
+  for (var i = 0; i < byteArray.length; i++) {
+    binaryString += String.fromCharCode(byteArray[i]);
+  }
+  return btoa(binaryString);
+}
 
 function userExit(event) {
   event.preventDefault();
@@ -87,9 +127,14 @@ function sendMessage(event) {
   event.preventDefault();
   var message = document.querySelector("#message").value;
   stompClient.send(
-    "/app/messages/send",
+    "/app/messages/send/text",
     {},
-    JSON.stringify({ message: message, chatId: chatId })
+    JSON.stringify({
+      message: message,
+      chatId: chatId,
+      byteImg: null,
+      type: "TEXT",
+    })
   );
 }
 
@@ -112,35 +157,66 @@ function addUserInChat() {
   );
 }
 
-function createMessage(message, currentUser) {
+function createTextMessage(message, currentUser) {
   let liMessage = document.createElement("li");
 
-  if (message.type == "CHAT") {
-    let senderMessage = document.createElement("p");
+  let senderMessage = document.createElement("p");
 
-    let textMessage = document.createElement("p");
-    textMessage.textContent = message.messageContent;
+  let textMessage = document.createElement("p");
+  textMessage.textContent = message.messageContent;
 
-    if (message.senderName == currentUser) {
-      senderMessage.textContent = "You :)";
-      liMessage.style.alignSelf = "flex-end";
-    } else {
-      senderMessage.textContent = message.senderName;
-      liMessage.style.backgroundColor = "grey";
-      liMessage.style.alignSelf = "flex-start";
-    }
-
-    liMessage.appendChild(senderMessage);
-    liMessage.appendChild(textMessage);
-
-    liMessage.className = "liMessageArea";
+  if (message.senderName == currentUser) {
+    senderMessage.textContent = "You :)";
+    liMessage.style.alignSelf = "flex-end";
   } else {
-    let pMessageStatus = document.createElement("p");
-    pMessageStatus.textContent = message.type + " " + message.senderName;
-    liMessage.appendChild(pMessageStatus);
-    liMessage.className = "liJoin";
+    senderMessage.textContent = message.senderName;
+    liMessage.style.backgroundColor = "grey";
+    liMessage.style.alignSelf = "flex-start";
   }
 
+  liMessage.appendChild(senderMessage);
+  liMessage.appendChild(textMessage);
+
+  liMessage.className = "liMessageArea";
+
+  messageArea.appendChild(liMessage);
+}
+
+function createImageUrl(imageBase64) {
+  var byteCharacters = atob(imageBase64);
+  var byteNumbers = new Array(byteCharacters.length);
+
+  for (var i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+
+  var byteArray = new Uint8Array(byteNumbers);
+  var blob = new Blob([byteArray], { type: "image/*" });
+  var imageUrl = URL.createObjectURL(blob);
+  console.log("Image URL: ", imageUrl);
+  return imageUrl;
+}
+
+function createImgMessage(message, currentUser) {
+  let liMessage = document.createElement("li");
+  var imgElement = document.createElement("img");
+  let senderMessage = document.createElement("p");
+
+  imgElement.src = createImageUrl(message.byteImg);
+  imgElement.alt = "Image message";
+  imgElement.className = "imgForChat";
+  liMessage.className = "liImgForChat";
+
+  if (message.senderName == currentUser) {
+    senderMessage.textContent = "You :)";
+    liMessage.style.alignSelf = "flex-end";
+  } else {
+    senderMessage.textContent = message.senderName;
+    liMessage.style.backgroundColor = "grey";
+    liMessage.style.alignSelf = "flex-start";
+  }
+  liMessage.appendChild(senderMessage);
+  liMessage.appendChild(imgElement);
   messageArea.appendChild(liMessage);
 }
 
@@ -160,7 +236,7 @@ function createJoinMessage(messageStatus) {
   let liMessage = document.createElement("li");
   let pMessageStatus = document.createElement("p");
   pMessageStatus.textContent =
-    messageStatus.status + " " + messageStatus.username;
+    messageStatus.type + " " + messageStatus.username;
   liMessage.appendChild(pMessageStatus);
   liMessage.className = "liJoin";
   messageArea.appendChild(liMessage);
@@ -173,7 +249,13 @@ stompClient.connect({}, function (frame) {
     var messages = JSON.parse(response.body);
     var messagesArray = Object.values(messages);
     messagesArray.forEach((message) => {
-      createMessage(message, currentUser);
+      if (message.type == "TEXT") {
+        createTextMessage(message, currentUser);
+      } else if (message.type == "IMG") {
+        createImgMessage(message, currentUser);
+      } else {
+        createJoinMessage(message);
+      }
     });
   });
 
@@ -183,10 +265,21 @@ stompClient.connect({}, function (frame) {
     nameChat.textContent = chatName;
   });
 
-  stompClient.subscribe("/topic/messages/send/" + chatId, function (response) {
-    var message = JSON.parse(response.body);
-    createMessage(message, currentUser);
-  });
+  stompClient.subscribe(
+    "/topic/messages/send/text/" + chatId,
+    function (response) {
+      var message = JSON.parse(response.body);
+      createTextMessage(message, currentUser);
+    }
+  );
+
+  stompClient.subscribe(
+    "/topic/messages/send/img/" + chatId,
+    function (response) {
+      var message = JSON.parse(response.body);
+      createImgMessage(message, currentUser);
+    }
+  );
 
   stompClient.subscribe("/user/topic/chatroom/create", function (response) {
     var chat = JSON.parse(response.body);

@@ -124,15 +124,22 @@
         <ul id="ul-attach">
           <li id="attach-photo">
             <img src="/img/photo.svg" alt="" />
-            <p>Фотография</p>
+            <p>Photo</p>
+            <input
+              type="file"
+              id="imageInput"
+              accept="image/*"
+              style="display: none"
+            />
+            <button onclick="openFileInput()" class="plus">+</button>
           </li>
           <li id="attach-video">
             <img src="/img/video.svg" alt="" />
-            <p>Видео</p>
+            <p>Video</p>
           </li>
           <li id="attach-file">
             <img src="/img/file.svg" alt="" />
-            <p>Файл</p>
+            <p>File</p>
           </li>
         </ul>
       </div>
