@@ -81,4 +81,11 @@ public class ChatMessageService {
         }
         return messages;
     }
+
+    @Transactional
+    public List<ChatMessageEntity> searchMessages(String chatRoomId, String message){
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatRoomId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
+        List<ChatMessageEntity> messages = chatMessageRepository.findByMessageContentContainingAndChatRoom(message, chatRoom);
+        return messages;
+    }
 }

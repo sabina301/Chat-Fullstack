@@ -1,10 +1,7 @@
 package com.example.websocketchat.controller;
 
 import com.example.websocketchat.entity.ChatMessageEntity;
-import com.example.websocketchat.model.DTO.GetMessageDTOrequest;
-import com.example.websocketchat.model.DTO.SendMessageDTOrequest;
-import com.example.websocketchat.model.DTO.SendImgDTOresponse;
-import com.example.websocketchat.model.DTO.SendTextDTOresponse;
+import com.example.websocketchat.model.DTO.*;
 import com.example.websocketchat.model.MessageType;
 import com.example.websocketchat.service.ChatMessageService;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +46,13 @@ public class ChatMessageController {
     public void getMessages(GetMessageDTOrequest request, Principal principal){
         List<ChatMessageEntity> messages = chatMessageService.getMessages(request.getChatId());
         messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/messages/get", messages);
+    }
+
+    @Transactional
+    @MessageMapping("/messages/search")
+    public void searchMessages(SearchMessageDTOrequest request, Principal principal){
+        List<ChatMessageEntity> messages = chatMessageService.searchMessages(request.getChatId(),request.getMessage());
+        messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/messages/search", messages);
     }
 
 
