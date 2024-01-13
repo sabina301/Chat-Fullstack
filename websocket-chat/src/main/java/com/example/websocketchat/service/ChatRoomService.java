@@ -81,6 +81,7 @@ public class ChatRoomService {
         return false;
     }
 
+    @Transactional
     public Boolean userHereByUsername(String username, Long chatId){
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found"));
         ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom not found"));
