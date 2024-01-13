@@ -12,20 +12,30 @@
     <div id="main-container">
       <div id="chat-page">
         <div class="chat-container">
-          <div class="chat-header">
-            <h1 id="nameChat"></h1>
+          <h1 id="nameChat"></h1>
+          <div id="chat-header">
             <button id="back" class="btn">
               <img src="/img/back.svg" alt="" />
             </button>
             <button id="addUser" class="btn">
               <img src="/img/plus-person.svg" alt="" />
             </button>
-            <button id="searchMessage" class="btn">
-              <img src="/img/search.svg" alt="" />
-            </button>
+
             <button id="getInfo" class="btn">
               <img src="/img/more.svg" alt="" />
             </button>
+
+            <form id="searchForm">
+              <input
+                type="text"
+                id="searchInput"
+                name="searchInput"
+                placeholder="Введите запрос..."
+              />
+              <button id="searchMessage" class="btn" type="submit">
+                <img src="/img/search.svg" alt="" />
+              </button>
+            </form>
             <button id="exit" class="btn">
               <img src="/img/close.svg" alt="" />
             </button>
@@ -142,6 +152,11 @@
             <p>File</p>
           </li>
         </ul>
+      </div>
+
+      <div id="modal-search">
+        <button class="btn" id="close-search">close</button>
+        <ul id="ul-search"></ul>
       </div>
     </div>
     <script src="/js/oneChat.js"></script>

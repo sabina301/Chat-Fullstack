@@ -12,16 +12,22 @@ const attach = document.querySelector("#attach");
 const modalAttach = document.querySelector("#modalAttach");
 const back = document.querySelector("#back");
 const exit = document.querySelector("#exit");
+const searchBtn = document.querySelector("#searchMessage");
+const modalSearch = document.querySelector("#modal-search");
+const closeSearchBtn = document.querySelector("#close-search");
 
 writeNameBtn.addEventListener("click", addUserInChat);
 send.addEventListener("click", (event) => sendMessage(event));
 addUserBtn.addEventListener("click", () => openModal(modalAddUser));
 getInfoBtn.addEventListener("click", () => openModalGetInfo(modalGetInfo));
+modalSearch.addEventListener("click", () => openModalSearch());
 closeModalAddUser.addEventListener("click", closeAddUserModal);
 closeModalGetInfo.addEventListener("click", closeGetInfoModal);
 attach.addEventListener("click", (event) => openModalAttach(event));
 back.addEventListener("click", (event) => goBack(event));
 exit.addEventListener("click", (event) => userExit(event));
+searchBtn.addEventListener("click", (event) => searchMessage(event));
+closeSearchBtn.addEventListener("click", (event) => closeSearch(event));
 
 var socket = new SockJS("http://localhost:8080/ws");
 var stompClient = Stomp.over(socket, {
@@ -42,6 +48,11 @@ function openFileInput() {
 document.getElementById("imageInput").addEventListener("change", function () {
   uploadImage();
 });
+
+function closeSearch(event) {
+  event.preventDefault();
+  modalSearch.style.display = "none";
+}
 
 function uploadImage() {
   var input = document.getElementById("imageInput");
@@ -71,6 +82,19 @@ function encodeByteArray(byteArray) {
     binaryString += String.fromCharCode(byteArray[i]);
   }
   return btoa(binaryString);
+}
+
+function searchMessage(event) {
+  event.preventDefault();
+
+  document.querySelector("#ul-search").innerHTML = "";
+  modalSearch.style.display = "block";
+  let input = document.querySelector("#searchInput").value;
+  stompClient.send(
+    "/app/messages/search",
+    {},
+    JSON.stringify({ message: input, chatId: chatId })
+  );
 }
 
 function userExit(event) {
@@ -252,6 +276,36 @@ stompClient.connect({}, function (frame) {
         createJoinMessage(message);
       }
     });
+  });
+
+  stompClient.subscribe("/user/topic/messages/search", function (response) {
+    var messages = JSON.parse(response.body);
+    var messagesArray = Object.values(messages);
+    console.log("!!!! 1 " + messagesArray.length);
+    messagesArray.forEach((message) => {
+      var li = document.createElement("li");
+      var senderName = message.senderName;
+      var textMessage = message.messageContent;
+
+      var pName = document.createElement("p");
+      var pMessage = document.createElement("p");
+
+      pName.textContent = senderName;
+      pMessage.textContent = textMessage;
+
+      li.appendChild(pName);
+      li.appendChild(pMessage);
+
+      document.querySelector("#ul-search").appendChild(li);
+    });
+    console.log("!!!! 2 " + messagesArray.length);
+    if (messagesArray.length == 0) {
+      var li = document.createElement("li");
+      var text = document.createElement("p");
+      text.textContent = "No messages";
+      li.appendChild(text);
+      document.querySelector("#ul-search").appendChild(li);
+    }
   });
 
   stompClient.subscribe("/user/topic/chatroom/get/one", function (response) {

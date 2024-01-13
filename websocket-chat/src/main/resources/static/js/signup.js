@@ -16,13 +16,13 @@ document
     var password = document.getElementById("password").value;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:8080/auth/register", true);
+    xhr.open("POST", "/auth/register", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         var response = JSON.parse(xhr.responseText);
         if (response.username != null) {
-          window.location.href = "login.html";
+          window.location.href = "/login";
         } else {
           displayError();
         }
@@ -39,11 +39,11 @@ document
     event.preventDefault();
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:8080/login", true);
+    xhr.open("GET", "/login", true);
 
     xhr.onload = function () {
       if (xhr.status == 200) {
-        window.location.href = "http://localhost:8080/login";
+        window.location.href = "/login";
       } else {
         console.log("Error " + xhr.status);
       }
