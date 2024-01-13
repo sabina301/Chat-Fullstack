@@ -44,6 +44,7 @@ public class ChatRoomService {
         return chatRoom;
     }
 
+    @Transactional
     public Set<ChatRoomEntity> getAllForUser(String username) {
         UserEntity user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException("Don't have user with this name"));
         return user.getChatRooms();
