@@ -66,8 +66,8 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> {
-                    auth.requestMatchers("/ws/**","/socket.io/**", "/error/**", "/auth/**", "/login", "/signup", "/index.html", "/signup.html", "/login.html", "/img/**", "/css/**", "/js/**").permitAll(); //сделано
-                    auth.requestMatchers(  "/chat", "/chat.html", "/chatroom/**", "/messages/**").authenticated();
+                    auth.requestMatchers( "/error/**", "/auth/**", "/index.html", "/login", "/signup", "/css/login.css", "/css/signup.css", "/js/login.js", "/js/signup.js", "/img/background-login.png").permitAll();
+                    auth.requestMatchers(  "/chat", "/chatroom/**", "/messages/**", "/ws/**", "/css/**", "/img/**", "/js/**").authenticated();
                     auth.anyRequest().authenticated();
                 });
 

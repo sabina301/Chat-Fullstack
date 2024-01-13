@@ -54,7 +54,7 @@ public class ChatRoomController {
             UserEntity user = chatRoomService.getUser(request.getUsername());
             ChatRoomEntity chatRoom = chatRoomService.getChatRoom(request.getChatId());
 
-            if (chatRoomService.userHere(user.getId(), chatRoom.getId())){
+            if (chatRoomService.userHereById(user.getId(), chatRoom.getId())){
                 throw new Exception("Error");
             }
 

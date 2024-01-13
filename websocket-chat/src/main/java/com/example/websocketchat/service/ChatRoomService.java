@@ -67,7 +67,7 @@ public class ChatRoomService {
         existingUser.addChatRoom(existingChatRoom);
     }
 
-    public Boolean userHere(Long userId, Long chatId){
+    public Boolean userHereById(Long userId, Long chatId){
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
         ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom not found"));
 
@@ -80,6 +80,21 @@ public class ChatRoomService {
         }
         return false;
     }
+
+    public Boolean userHereByUsername(String username, Long chatId){
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom not found"));
+
+        Set<UserEntity> users = chatRoom.getUsers();
+
+        for (UserEntity userEntity: users){
+            if (userEntity.getUsername().equals(user.getUsername())){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public Set<UserGetDTOresponse> getUsers(String chatId){
         ChatRoomEntity chatRoomEntity = getChatRoom(chatId);
