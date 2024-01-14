@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -73,6 +74,8 @@ public class ChatRoomController {
         messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/chatroom/info/get",chatRoom);
         Set<UserGetDTOresponse> userEntities = chatRoomService.getUsers(request.getChatId());
         messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/chatroom/info/get/users", userEntities);
+        int[] quantityOfRes = chatRoomService.getQuantityOfRes(request.getChatId());
+        messagingTemplate.convertAndSendToUser(principal.getName(),"/topic/chatroom/info/get/res",quantityOfRes);
     }
 
     @MessageMapping("/chatroom/user/exit")

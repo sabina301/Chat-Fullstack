@@ -4,5 +4,7 @@ public enum MessageType {
     JOIN,
     LEAVE,
     IMG,
-    TEXT
+    TEXT,
+    VIDEO,
+    FIlE
 }

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -68,8 +67,8 @@ public class ChatRoomService {
     }
 
     public Boolean userHereById(Long userId, Long chatId){
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom not found"));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not found"));
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom is not found"));
 
         Set<UserEntity> users = chatRoom.getUsers();
 
@@ -83,8 +82,8 @@ public class ChatRoomService {
 
     @Transactional
     public Boolean userHereByUsername(String username, Long chatId){
-        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom not found"));
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User is not found"));
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom is not found"));
 
         Set<UserEntity> users = chatRoom.getUsers();
 
@@ -125,7 +124,7 @@ public class ChatRoomService {
     @Transactional
     public void exitUser(String username, String chatId){
 
-        UserEntity user = userRepository.findByUsername(username).orElseThrow(()->new UserNotFoundException("User not found"));
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(()->new UserNotFoundException("User is not found"));
         ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
 
         user.deleteChatRoom(chatRoom);
@@ -134,5 +133,22 @@ public class ChatRoomService {
         userRepository.save(user);
         chatRoomRepository.save(chatRoom);
 
+    }
+
+    @Transactional
+    public int[] getQuantityOfRes(String chatId){
+        int[] quantityOfRes = new int[3];
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()-> new ChatroomNotFoundException("Chatroom is not found"));
+        Set<ChatMessageEntity> messages = chatRoom.getMessages();
+        messages.forEach((message)->{
+            if (message.getType() == MessageType.IMG){
+                quantityOfRes[0]+=1;
+            } else if (message.getType() == MessageType.VIDEO){
+                quantityOfRes[1]+=1;
+            } else if (message.getType() == MessageType.FIlE){
+                quantityOfRes[2]+=1;
+            }
+        });
+        return quantityOfRes;
     }
 }
