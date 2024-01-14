@@ -212,7 +212,6 @@ function createImageUrl(imageBase64) {
   var byteArray = new Uint8Array(byteNumbers);
   var blob = new Blob([byteArray], { type: "image/*" });
   var imageUrl = URL.createObjectURL(blob);
-  console.log("Image URL: ", imageUrl);
   return imageUrl;
 }
 
@@ -276,12 +275,12 @@ stompClient.connect({}, function (frame) {
         createJoinMessage(message);
       }
     });
+    messageArea.scrollTop = messageArea.scrollHeight - messageArea.clientHeight;
   });
 
   stompClient.subscribe("/user/topic/messages/search", function (response) {
     var messages = JSON.parse(response.body);
     var messagesArray = Object.values(messages);
-    console.log("!!!! 1 " + messagesArray.length);
     messagesArray.forEach((message) => {
       var li = document.createElement("li");
       var senderName = message.senderName;
@@ -298,7 +297,6 @@ stompClient.connect({}, function (frame) {
 
       document.querySelector("#ul-search").appendChild(li);
     });
-    console.log("!!!! 2 " + messagesArray.length);
     if (messagesArray.length == 0) {
       var li = document.createElement("li");
       var text = document.createElement("p");
@@ -319,6 +317,8 @@ stompClient.connect({}, function (frame) {
     function (response) {
       var message = JSON.parse(response.body);
       createTextMessage(message, currentUser);
+      messageArea.scrollTop =
+        messageArea.scrollHeight - messageArea.clientHeight;
     }
   );
 
@@ -327,6 +327,8 @@ stompClient.connect({}, function (frame) {
     function (response) {
       var message = JSON.parse(response.body);
       createImgMessage(message, currentUser);
+      messageArea.scrollTop =
+        messageArea.scrollHeight - messageArea.clientHeight;
     }
   );
 
@@ -340,6 +342,8 @@ stompClient.connect({}, function (frame) {
     function (response) {
       var messageStatus = JSON.parse(response.body);
       createJoinMessage(messageStatus);
+      messageArea.scrollTop =
+        messageArea.scrollHeight - messageArea.clientHeight;
     }
   );
 
@@ -353,7 +357,6 @@ stompClient.connect({}, function (frame) {
 
   stompClient.subscribe("/user/topic/chatroom/info/get", function (response) {
     var chat = JSON.parse(response.body);
-    console.log(chat);
     document.querySelector("#chatName").textContent = chat.name;
   });
 
@@ -376,6 +379,16 @@ stompClient.connect({}, function (frame) {
 
         document.querySelector("#ul-people").appendChild(liUser);
       });
+    }
+  );
+
+  stompClient.subscribe(
+    "/user/topic/chatroom/info/get/res",
+    function (response) {
+      var quantityOfRes = JSON.parse(response.body);
+      document.querySelector("#photo-quantity").textContent = quantityOfRes[0];
+      document.querySelector("#video-quantity").textContent = quantityOfRes[1];
+      document.querySelector("#file-quantity").textContent = quantityOfRes[2];
     }
   );
 
