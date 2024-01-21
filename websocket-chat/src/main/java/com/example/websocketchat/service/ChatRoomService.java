@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatRoomService {
@@ -72,39 +72,28 @@ public class ChatRoomService {
 
         Set<UserEntity> users = chatRoom.getUsers();
 
-        for (UserEntity userEntity: users){
-            if (userEntity.getUsername().equals(user.getUsername())){
-                return true;
-            }
-        }
-        return false;
+        return users.stream()
+                .anyMatch(userEntity->userEntity.getUsername().equals(user.getUsername()));
     }
 
     @Transactional
     public Boolean userHereByUsername(String username, Long chatId){
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User is not found"));
         ChatRoomEntity chatRoom = chatRoomRepository.findById(chatId).orElseThrow(()->new EntityNotFoundException("ChatRoom is not found"));
-
         Set<UserEntity> users = chatRoom.getUsers();
 
-        for (UserEntity userEntity: users){
-            if (userEntity.getUsername().equals(user.getUsername())){
-                return true;
-            }
-        }
-        return false;
+        return users.stream()
+                .anyMatch(userEntity->userEntity.getUsername().equals(user.getUsername()));
     }
 
 
     public Set<UserGetDTOresponse> getUsers(String chatId){
         ChatRoomEntity chatRoomEntity = getChatRoom(chatId);
         Set<UserEntity> userEntities = chatRoomEntity.getUsers();
-        Set<UserGetDTOresponse> users = new HashSet<>();
-        for (UserEntity userEntity: userEntities) {
-            UserGetDTOresponse userGetDTOresponse = new UserGetDTOresponse(userEntity.getId(), userEntity.getUsername());
-            users.add(userGetDTOresponse);
-        }
-        return users;
+
+        return userEntities.stream()
+                .map(userEntity->new UserGetDTOresponse(userEntity.getId(), userEntity.getUsername()))
+                .collect(Collectors.toSet());
     }
 
     public void saveMessageStatus(MessageType messageType, String username, String chatId){
@@ -116,7 +105,6 @@ public class ChatRoomService {
         message.setType(messageType);
         message.setTimestamp(LocalDateTime.now());
         chatMessageRepository.save(message);
-
         chatRoom.addMessage(message);
         chatRoomRepository.save(chatRoom);
     }

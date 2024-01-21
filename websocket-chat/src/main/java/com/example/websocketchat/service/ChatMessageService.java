@@ -72,13 +72,10 @@ public class ChatMessageService {
     @Transactional
     public List<ChatMessageEntity> getMessages(String chatId){
         ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
-        List<ChatMessageEntity> messages = entityManager.createQuery("SELECT id, senderName, messageContent, type, timestamp FROM ChatMessageEntity WHERE chatRoom = :chatRoom ORDER BY timestamp", ChatMessageEntity.class)
+        List<ChatMessageEntity> messages = entityManager.createQuery("SELECT cm FROM ChatMessageEntity cm WHERE cm.chatRoom = :chatRoom ORDER BY cm.timestamp", ChatMessageEntity.class)
                 .setParameter("chatRoom", chatRoom)
                 .getResultList();
-        for (ChatMessageEntity message : messages) {
-            byte[] byteImg = chatMessageRepository.findById(message.getId()).get().getByteImg();
-            message.setByteImg(byteImg);
-        }
+
         return messages;
     }
 
