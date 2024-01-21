@@ -37,15 +37,8 @@ public class ChatMessageService {
     public void sendTextMessage(String messageContent, String chatRoomId, String username){
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User is not found"));
         ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatRoomId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
-        ChatMessageEntity message = new ChatMessageEntity();
-        message.setMessageContent(messageContent);
-        message.setChatRoom(chatRoom);
-        message.setSenderName(user.getUsername());
-        message.setType(MessageType.TEXT);
-        message.setByteImg(new byte[]{0});
-        message.setTimestamp(LocalDateTime.now());
+        ChatMessageEntity message = new ChatMessageEntity(user.getUsername(),messageContent,MessageType.TEXT,new byte[]{0},LocalDateTime.now(), chatRoom);
         chatMessageRepository.save(message);
-
         chatRoom.addMessage(message);
         chatRoomRepository.save(chatRoom);
     }
@@ -54,17 +47,8 @@ public class ChatMessageService {
     public void sendImgMessage(byte[] byteImg, String chatRoomId, String username){
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User is not found"));
         ChatRoomEntity chatRoom = chatRoomRepository.findById(Long.valueOf(chatRoomId)).orElseThrow(()->new ChatroomNotFoundException("Chatroom is not found"));
-
-        ChatMessageEntity message = new ChatMessageEntity();
-        message.setMessageContent("Image");
-        message.setChatRoom(chatRoom);
-        message.setSenderName(user.getUsername());
-        message.setType(MessageType.IMG);
-        message.setByteImg(byteImg);
-        message.setTimestamp(LocalDateTime.now());
-
+        ChatMessageEntity message = new ChatMessageEntity(user.getUsername(),"Image",MessageType.IMG,byteImg,LocalDateTime.now(),chatRoom);
         chatMessageRepository.save(message);
-
         chatRoom.addMessage(message);
         chatRoomRepository.save(chatRoom);
     }

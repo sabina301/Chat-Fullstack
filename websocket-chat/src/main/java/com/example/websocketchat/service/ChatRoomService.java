@@ -97,13 +97,9 @@ public class ChatRoomService {
     }
 
     public void saveMessageStatus(MessageType messageType, String username, String chatId){
-        ChatMessageEntity message = new ChatMessageEntity();
         ChatRoomEntity chatRoom = getChatRoom(chatId);
-        message.setMessageContent("");
-        message.setChatRoom(chatRoom);
-        message.setSenderName(username);
-        message.setType(messageType);
-        message.setTimestamp(LocalDateTime.now());
+        ChatMessageEntity message = new ChatMessageEntity(username,"",messageType,new byte[]{0},LocalDateTime.now(),chatRoom);
+
         chatMessageRepository.save(message);
         chatRoom.addMessage(message);
         chatRoomRepository.save(chatRoom);
